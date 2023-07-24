@@ -30,24 +30,22 @@ const Player = ({ playerId, flip=false }: PlayerProps) => {
     const player = useAppSelector(s => selectPlayerById(s.players, playerId));
     const refTimeout = useRef<number>();
     const [scoreAdjust, setScoreAdjust] = useState<number | null>(null);
-
+    const [animating, setAnimating] = useState(false);
     const scoreAdjustIndicatorId = `player-${playerId}-score-adjustment`;
+    const animationTimeMS = 2000;
 
     const onAdjust = (plusMinus: "+" | "-") => {
         clearTimeout(refTimeout.current);
         const adjustment = (scoreAdjust === null ? 0 : scoreAdjust) + (plusMinus === "+" ? 1 : -1);
         setScoreAdjust(adjustment);
         refTimeout.current = setTimeout(() => {
-            dispatch(playerAdjustScore({ playerId, amount: adjustment }));
+            console.log("score adjusted");
             setScoreAdjust(null);
-        }, 1500);
+            dispatch(playerAdjustScore({ playerId, amount: adjustment }));
+        }, animationTimeMS);
 
-        // const scoreAdjuster = document.getElementById(scoreAdjustIndicatorId);
-        // if (scoreAdjuster !== null) {
-        //     scoreAdjuster.style.animation = "none";
-        //     scoreAdjuster.offsetHeight;
-        //     setTimeout(() => scoreAdjuster.style.animation = "", 10);
-        // }
+        setAnimating(false);
+        setTimeout(() => setAnimating(true), 0);
     };
 
     return player === undefined ? null : <div style={{
@@ -77,7 +75,7 @@ const Player = ({ playerId, flip=false }: PlayerProps) => {
                     textAlign: "center",
                     fontSize: 52,
                     color: "#fff",
-                    // animation: "1.5s disappear",
+                    animation: animating ? `${animationTimeMS / 1000}s disappear` : "",
                 }}>{(scoreAdjust >= 0 ? "+" : "-") + Math.abs(scoreAdjust)}</div>}
             </div>
             <div className="player-score-container" style={{
