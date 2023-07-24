@@ -36,15 +36,18 @@ const playersSlice = createSlice({
         },
     }),
     reducers: {
-        addPlayer: playersAdapter.addOne,
-        removePlayer: playersAdapter.removeOne,
-        adjustPlayerScore: (state, action: PayloadAction<{ playerId: string, amount: number }>) => {
+        playerAdd: playersAdapter.addOne,
+        playerRemove: playersAdapter.removeOne,
+        playerAdjustScore: (state, action: PayloadAction<{ playerId: EntityId, amount: number }>) => {
             const { playerId, amount } = action.payload;
-            if (state.entities[playerId] === undefined) return;
-            state.entities[playerId].score += amount;
+            const player = state.entities[playerId];
+            if (player === undefined) return;
+            player.score += amount;
         },
     },
 });
+
+export const { playerAdd, playerRemove, playerAdjustScore } = playersSlice.actions;
 
 export const {
     selectById: selectPlayerById,
