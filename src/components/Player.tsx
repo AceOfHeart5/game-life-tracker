@@ -4,6 +4,7 @@ import { playerAdjustScore, selectPlayerById } from "../state/playerSlice";
 
 interface PlayerProps {
     playerId: EntityId,
+    flip?: boolean,
 }
 
 const plusMinusStyle: React.CSSProperties = {
@@ -20,10 +21,10 @@ const scoreAdjustStyle: React.CSSProperties = {
     position: "absolute",
     width: "50%",
     height: "100%",
-    opacity: 0.5,
+    opacity: 0,
 };
 
-const Player = ({ playerId }: PlayerProps) => {
+const Player = ({ playerId, flip=false }: PlayerProps) => {
     const dispatch = useAppDispatch();
 
     const player = useAppSelector(s => selectPlayerById(s.players, playerId));
@@ -37,6 +38,7 @@ const Player = ({ playerId }: PlayerProps) => {
         flexGrow: 1,
         display: "flex",
         flexDirection: "column",
+        transform: flip ? "rotate(180deg)" : "",
     }}>
         <div style={{ padding: "8px" }}>
             <div style={{ fontSize: 24 }}>{player.name}</div>
