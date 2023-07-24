@@ -4,7 +4,7 @@ function App() {
 	return <div style={{
 		display: "flex",
 		flexDirection: "column",
-		minHeight: "200px",
+		height: "100%",
 	}}>
 		<PlayerList/>
 	</div>;

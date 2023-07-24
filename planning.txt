@@ -5,3 +5,5 @@ Initially thought we’d just need to increment and decrement the life counters.
 It just occurred to me that it makes sense to allow for tracking more than just 2 players. Obviously it should default to 2 but we could totally allow for more. If that’s true we need to adjust how our system works to account for this. It means players are more like entities that can be added or removed.
 
 I’m going to try using uuids for player ids. This is so overkill it’s disgusting but I want the practice.
+
+Small discovery around getting the app to fill the height of the device. The the html element is the root of all web pages, and does not have a default height of 100%, so this must be changed. In addition the body inside the html must be given a height of 100%. And finally, in react apps there is a div inside the body with the id "root". This div does not default to 100% either and must be given that as well.

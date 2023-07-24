@@ -1,3 +1,13 @@
-:root {
+html {
+  height: 100%;
+}
 
+body {
+  background-color: #999;
+  margin: 0;
+  height: 100%;
+}
+
+#root {
+  height: 100%;
 }

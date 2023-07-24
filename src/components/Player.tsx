@@ -12,6 +12,7 @@ const Player = ({ playerId }: PlayerProps) => {
 
     return <div style={{
         backgroundColor: player.backgroundColor,
+        flexGrow: 1,
     }}>{player.score}</div>
 };
 
