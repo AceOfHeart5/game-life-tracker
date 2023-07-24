@@ -1,6 +1,7 @@
 import { EntityId } from "@reduxjs/toolkit";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { playerAdjustScore, selectPlayerById } from "../state/playerSlice";
+import { useRef, useState } from "react";
 
 interface PlayerProps {
     playerId: EntityId,
@@ -26,11 +27,18 @@ const scoreAdjustStyle: React.CSSProperties = {
 
 const Player = ({ playerId, flip=false }: PlayerProps) => {
     const dispatch = useAppDispatch();
-
     const player = useAppSelector(s => selectPlayerById(s.players, playerId));
+    const refTimeout = useRef<number>();
+    const [scoreAdjust, setScoreAdjust] = useState<number | null>(null);
 
     const onAdjust = (plusMinus: "+" | "-") => {
-        dispatch(playerAdjustScore({ playerId, amount: plusMinus === "+" ? 1 : -1}))
+        clearTimeout(refTimeout.current);
+        const adjustment = (scoreAdjust === null ? 0 : scoreAdjust) + (plusMinus === "+" ? 1 : -1);
+        setScoreAdjust(adjustment);
+        refTimeout.current = setTimeout(() => {
+            dispatch(playerAdjustScore({ playerId, amount: adjustment }));
+            setScoreAdjust(null);
+        }, 1500);
     };
 
     return player === undefined ? null : <div style={{
@@ -50,9 +58,17 @@ const Player = ({ playerId, flip=false }: PlayerProps) => {
             flexDirection: "column",
             position: "relative",
         }}>
-            <div className="minus-plus-bar">
+            <div className="minus-plus-bar" style={{ position: "relative" }}>
                 <span style={plusMinusStyle}>-</span>
                 <span style={plusMinusStyle}>+</span>
+                { scoreAdjust === null ? null : <div style={{
+                    width: "100%",
+                    position: "absolute",
+                    top: 0,
+                    textAlign: "center",
+                    fontSize: 52,
+                    color: "#fff",
+                }}>{(scoreAdjust >= 0 ? "+" : "-") + Math.abs(scoreAdjust)}</div>}
             </div>
             <div className="player-score-container" style={{
                 flexGrow: 1,
@@ -60,7 +76,7 @@ const Player = ({ playerId, flip=false }: PlayerProps) => {
                 alignItems: "center",
                 justifyContent: "center",
             }}>
-                <span style={{ color: "#fff", fontSize: 200 }}>{player.score}</span>
+                <span style={{ color: "#fff", fontSize: 200 }}>{player.score + (scoreAdjust === null ? 0 : scoreAdjust)}</span>
             </div>
             <button
                 className="player-score-decrease"
