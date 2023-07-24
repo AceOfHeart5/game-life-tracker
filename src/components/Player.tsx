@@ -31,6 +31,8 @@ const Player = ({ playerId, flip=false }: PlayerProps) => {
     const refTimeout = useRef<number>();
     const [scoreAdjust, setScoreAdjust] = useState<number | null>(null);
 
+    const scoreAdjustIndicatorId = `player-${playerId}-score-adjustment`;
+
     const onAdjust = (plusMinus: "+" | "-") => {
         clearTimeout(refTimeout.current);
         const adjustment = (scoreAdjust === null ? 0 : scoreAdjust) + (plusMinus === "+" ? 1 : -1);
@@ -39,6 +41,13 @@ const Player = ({ playerId, flip=false }: PlayerProps) => {
             dispatch(playerAdjustScore({ playerId, amount: adjustment }));
             setScoreAdjust(null);
         }, 1500);
+
+        // const scoreAdjuster = document.getElementById(scoreAdjustIndicatorId);
+        // if (scoreAdjuster !== null) {
+        //     scoreAdjuster.style.animation = "none";
+        //     scoreAdjuster.offsetHeight;
+        //     setTimeout(() => scoreAdjuster.style.animation = "", 10);
+        // }
     };
 
     return player === undefined ? null : <div style={{
@@ -61,13 +70,14 @@ const Player = ({ playerId, flip=false }: PlayerProps) => {
             <div className="minus-plus-bar" style={{ position: "relative" }}>
                 <span style={plusMinusStyle}>-</span>
                 <span style={plusMinusStyle}>+</span>
-                { scoreAdjust === null ? null : <div style={{
+                { scoreAdjust === null ? null : <div id={scoreAdjustIndicatorId} style={{
                     width: "100%",
                     position: "absolute",
                     top: 0,
                     textAlign: "center",
                     fontSize: 52,
                     color: "#fff",
+                    // animation: "1.5s disappear",
                 }}>{(scoreAdjust >= 0 ? "+" : "-") + Math.abs(scoreAdjust)}</div>}
             </div>
             <div className="player-score-container" style={{
