@@ -1,10 +1,11 @@
-import { createEntityAdapter, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createEntityAdapter, createSlice, EntityId, PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 
 interface Player {
-    id: string,
+    id: EntityId,
     name: string,
     score: number,
+    backgroundColor: string,
 }
 
 const playersAdapter = createEntityAdapter<Player>({
@@ -15,12 +16,14 @@ const player1: Player = {
     id: uuidv4(),
     name: "Player 1",
     score: 40,
+    backgroundColor: "#f44",
 };
 
 const player2: Player = {
     id: uuidv4(),
     name: "Player 2",
     score: 40,
+    backgroundColor: "#44f",
 };
 
 const playersSlice = createSlice({
@@ -45,6 +48,8 @@ const playersSlice = createSlice({
 
 export const {
     selectById: selectPlayerById,
+    selectEntities: selectPlayerAll,
+    selectIds: selectPlayerAllIds,
 } = playersAdapter.getSelectors();
 
 export default playersSlice.reducer;
