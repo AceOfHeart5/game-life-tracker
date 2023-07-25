@@ -1,7 +1,7 @@
 import { EntityId } from "@reduxjs/toolkit";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { playerAdjustScore, selectPlayerById } from "../state/playerSlice";
-import { useRef, useState } from "react";
+import { playerSetScore, selectPlayerById } from "../state/playerSlice";
+import { useEffect, useState } from "react";
 
 interface PlayerProps {
     playerId: EntityId,
@@ -28,25 +28,21 @@ const scoreAdjustStyle: React.CSSProperties = {
 const Player = ({ playerId, flip=false }: PlayerProps) => {
     const dispatch = useAppDispatch();
     const player = useAppSelector(s => selectPlayerById(s.players, playerId));
-    const refTimeout = useRef<number>();
-    const [scoreAdjust, setScoreAdjust] = useState<number | null>(null);
-    const [animating, setAnimating] = useState(false);
-    const scoreAdjustIndicatorId = `player-${playerId}-score-adjustment`;
-    const animationTimeMS = 2000;
+    const [temporaryScore, setTemporaryScore] = useState<{ score: number, adjustment: number} | null>(null);
+    const adjustmentIndicatorId = `player-${playerId}score-adjustment-indicator`;
 
-    const onAdjust = (plusMinus: "+" | "-") => {
-        clearTimeout(refTimeout.current);
-        const adjustment = (scoreAdjust === null ? 0 : scoreAdjust) + (plusMinus === "+" ? 1 : -1);
-        setScoreAdjust(adjustment);
-        refTimeout.current = setTimeout(() => {
-            console.log("score adjusted");
-            setScoreAdjust(null);
-            dispatch(playerAdjustScore({ playerId, amount: adjustment }));
-        }, animationTimeMS);
+    useEffect(() => {
+        if (temporaryScore === null) return;
+        const adjustmentIndicator = document.getElementById(adjustmentIndicatorId);
+        if (adjustmentIndicator === null) return;
+        adjustmentIndicator.style.animation = "none";
+        void adjustmentIndicator.offsetWidth; // triggers DOM reflow
+        adjustmentIndicator.style.animation = "2s disappear";
+    }, [adjustmentIndicatorId, temporaryScore]);
 
-        setAnimating(false);
-        setTimeout(() => setAnimating(true), 0);
-    };
+    useEffect(() => console.log("redux score updated:", player?.score), [player?.score]); // debug
+
+    const scoreToDisplay = temporaryScore ? temporaryScore.score : player === undefined ? 0 : player.score;
 
     return player === undefined ? null : <div style={{
         backgroundColor: player.backgroundColor,
@@ -68,33 +64,69 @@ const Player = ({ playerId, flip=false }: PlayerProps) => {
             <div className="minus-plus-bar" style={{ position: "relative" }}>
                 <span style={plusMinusStyle}>-</span>
                 <span style={plusMinusStyle}>+</span>
-                { scoreAdjust === null ? null : <div id={scoreAdjustIndicatorId} style={{
-                    width: "100%",
-                    position: "absolute",
-                    top: 0,
-                    textAlign: "center",
-                    fontSize: 52,
-                    color: "#fff",
-                    animation: animating ? `${animationTimeMS / 1000}s disappear` : "",
-                }}>{(scoreAdjust >= 0 ? "+" : "-") + Math.abs(scoreAdjust)}</div>}
+                {
+                    temporaryScore === null ? null : 
+                    <div
+                        id={adjustmentIndicatorId}
+                        style={{
+                            width: "100%",
+                            position: "absolute",
+                            top: 0,
+                            textAlign: "center",
+                            fontSize: 52,
+                            color: "#fff",
+                            opacity: 0,
+                        }}
+                        onAnimationEnd={() => {
+                            dispatch(playerSetScore({ playerId, score: temporaryScore.score }));
+                            setTemporaryScore(null);
+                        }}
+                    >
+                        {(temporaryScore.adjustment >= 0 ? "+" : "-") + Math.abs(temporaryScore.adjustment)}
+                    </div>
+                }
             </div>
-            <div className="player-score-container" style={{
+            <div className="player-score" style={{
                 flexGrow: 1,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
             }}>
-                <span style={{ color: "#fff", fontSize: 200 }}>{player.score + (scoreAdjust === null ? 0 : scoreAdjust)}</span>
+                <span style={{ color: "#fff", fontSize: 200 }}>{scoreToDisplay}</span>
             </div>
             <button
                 className="player-score-decrease"
                 style={{ ...scoreAdjustStyle, backgroundColor: "#0a0" }}
-                onClick={() => onAdjust("-")}
+                onClick={() => {
+                    if (temporaryScore === null) {
+                        setTemporaryScore({
+                            score: scoreToDisplay - 1,
+                            adjustment: -1,
+                        });
+                    } else {
+                        setTemporaryScore({
+                            score: temporaryScore.score - 1,
+                            adjustment: temporaryScore.adjustment - 1,
+                        })
+                    }
+                }}
             />
             <button
                 className="player-score-increase"
                 style={{ ...scoreAdjustStyle, left: "50%", backgroundColor: "#0f0" }}
-                onClick={() => onAdjust("+")}
+                onClick={() => {
+                    if (temporaryScore === null) {
+                        setTemporaryScore({
+                            score: scoreToDisplay + 1,
+                            adjustment: 1,
+                        });
+                    } else {
+                        setTemporaryScore({
+                            score: temporaryScore.score + 1,
+                            adjustment: temporaryScore.adjustment + 1,
+                        })
+                    }
+                }}
             />
         </div>
     </div>

@@ -10,4 +10,36 @@ Small discovery around getting the app to fill the height of the device. The the
 
 We've managed to add the main features pretty quickly. Next I want to add the timed adjuster I described above. Clicking plus or minus will do 2 things: set a local state value for the amount to adjust the player score by, and start a timeout function which will adjust the player score by the local state vaue. When the plus or minus are hit anytime, this will add/subtract to the local state value, and reset the timeout function. When the timeout function triggers it will reset the local state value in addition to changing the player state. We'll also have to add some fun css to make changes clear.
 
-Adding the timed adjuster wasn't too much of a problem. However I've found that the animation to make the indicator disappear is trickier than expected. I need to use a separate timeout to trigger the animation because I need it to reset
+Adding the timed adjuster wasn't too much of a problem. However I've found that the animation to make the indicator disappear is trickier than expected. I need to use a separate timeout to trigger the animation because I need it to reset it... I think? There must be a more elegant way to do it.
+
+
+25th of July, 2023
+
+In zoom meeting someone mentioned onAnimationEnd in JS in regards to resetting a CSS animation. This could be what I'm looking for?
+
+On review, it looks like simply removing and re-adding the animation does what we want. However we still have the bug of the score flickering sometimes. I believe this is because we're asking the redux state and local state to update at the same time, but they don't. It looks like the react state will lag behind the redux state sometimes, so the displayed score flickers an incorrect value for some milliseconds.
+
+I think I'll try moving the score adjust and score into the same state value in redux. This might not be elegant or correct? But it should fix the problem. 
+
+I have a different idea. What if instead of keeping a local state of a score adjustment, we kept track of an entire score and adjustment object: 
+{
+	newScore: number,
+	adjustment: number,
+}
+This entire object would normally be null and so we'd display the redux score. But we'll define it on adjustment click, and in that case we'll display the score from this adjustment object instead. Once the animation finishes we'll submit an update to the redux state and set the object to null. With this, regardless of which score we're displaying, it will be the correct value, so there will be no flicker!
+
+Our new system for changing score state seems to work correctly, but now our animation reset logic is broken. What's disturbing to me is I don't understand how they could be related, which means I have a fundamental misunderstanding of how this all works. Either way, we need to revisit the animation reset.
+
+Finally we found a way to restart CSS animations that's consistent and clean. It is technically a bit hacky, but it seems to be an "accepted" hack. Here's my best summary: To restart a CSS animation we remove it from the DOM and re-add it. We remove it by getting our element and setting the animation style to "none"
+element.style.animation = "none";
+Then the hacky part. We have to trigger a reflow of the DOM, we can do this by simply asking for the width or height of the element:
+void element.offsetWidth;
+The "void" there indicates we're not doing anything with that value. Now that the reflow has been triggered, we only need to re-add the animation:
+element.style.animation = "5s my-cool-animation";
+
+In summary it's:
+
+element.style.animation = "none";
+void element.offsetWidth;
+element.style.animation = "5s my-animation";
+
