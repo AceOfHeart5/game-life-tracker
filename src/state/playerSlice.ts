@@ -2,24 +2,27 @@ import { createEntityAdapter, createSlice, EntityId, PayloadAction } from "@redu
 import { v4 as uuidv4 } from "uuid";
 
 interface Player {
-    id: EntityId,
     name: string,
     score: number,
     backgroundColor: string,
 }
 
-const playersAdapter = createEntityAdapter<Player>({
+interface PlayerWithId extends Player {
+    id: EntityId,
+}
+
+const playersAdapter = createEntityAdapter<PlayerWithId>({
     selectId: (player) => player.id,
 });
 
-const player1: Player = {
+const player1: PlayerWithId = {
     id: uuidv4(),
     name: "Player 1",
     score: 40,
     backgroundColor: "#f44",
 };
 
-const player2: Player = {
+const player2: PlayerWithId = {
     id: uuidv4(),
     name: "Player 2",
     score: 40,
@@ -36,7 +39,9 @@ const playersSlice = createSlice({
         },
     }),
     reducers: {
-        playerAdd: playersAdapter.addOne,
+        playerAdd: (state, action: PayloadAction<Player>) => {
+            playersAdapter.addOne(state, { id: uuidv4(), ...action.payload });
+        },
         playerRemove: playersAdapter.removeOne,
         playerSetScore: (state, action: PayloadAction<{ playerId: EntityId, score: number }>) => {
             const { playerId, score } = action.payload;

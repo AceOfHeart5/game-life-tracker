@@ -43,3 +43,12 @@ element.style.animation = "none";
 void element.offsetWidth;
 element.style.animation = "5s my-animation";
 
+That was a major hurdle for this project. Next I think we should focus on responsiveness. Here's a few things I was thinking about:
+
+Horizontal/vertical orientation player cards depending on window size.
+Column or row aligned cards depending on window size.
+Options bar in different positions depending on window size.
+
+We also need the ability to add/remove players. I think next we should add a phone friendly options bar that stays in between 2 player cards if there are 2, and goes to the top if there are 3 or more. We also need to account for a 1 player only situation. Hmmm, I don't want to deal with modals quite yet, so let's try just adding an options bar with an "add player" button, and we'll add a remove player button to the player cards.
+
+While working on adding players, it occured to me that it might be worth redoing how we adjust and track player scores. I have an alternative idea to our current system of temporarily committing to making an adjustment. We eventually want to be able to produce a log of score changes. So I thought what if instead of keeping track of the players score, we simply log all changes and infer the player score from those changes? I think this feels better since it's relying on a single source of truth for the player score. Additionally, instead of temporarily committing to making an adjustment to a score, I think we should immediately log that adjustment, but temporarily maintain a reference to that change in the component. Clicking increment or decrement will continue to make changes to that specific change log, and it's only after the fade-away period has ended that we lose the ability to change that entry in the score log. Yes, I like this a lot. But perhaps we'll commit to finishing our player add code first.

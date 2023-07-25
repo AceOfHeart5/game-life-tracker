@@ -1,6 +1,6 @@
 import { EntityId } from "@reduxjs/toolkit";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { playerSetScore, selectPlayerById } from "../state/playerSlice";
+import { playerRemove, playerSetScore, selectPlayerById } from "../state/playerSlice";
 import { useEffect, useState } from "react";
 
 interface PlayerProps {
@@ -35,8 +35,9 @@ const Player = ({ playerId, flip=false }: PlayerProps) => {
         if (temporaryScore === null) return;
         const adjustmentIndicator = document.getElementById(adjustmentIndicatorId);
         if (adjustmentIndicator === null) return;
+        // here we restart the score adjustment CSS animation by removing it, reflowing the DOM, and re-adding it
         adjustmentIndicator.style.animation = "none";
-        void adjustmentIndicator.offsetWidth; // triggers DOM reflow
+        void adjustmentIndicator.offsetWidth; // requesting offsetWidth/offsetHeight triggers DOM reflow
         adjustmentIndicator.style.animation = "2s disappear";
     }, [adjustmentIndicatorId, temporaryScore]);
 
@@ -51,8 +52,9 @@ const Player = ({ playerId, flip=false }: PlayerProps) => {
         flexDirection: "column",
         transform: flip ? "rotate(180deg)" : "",
     }}>
-        <div style={{ padding: "8px" }}>
+        <div style={{ padding: "8px", display: "flex", gap: "16px" }}>
             <div style={{ fontSize: 24 }}>{player.name}</div>
+            <button onClick={() => dispatch(playerRemove(playerId))}>Remove</button>
         </div> 
         <div className="score-adjustment-container" style={{
             backgroundColor: "#333",

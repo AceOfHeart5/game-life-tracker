@@ -1,3 +1,4 @@
+import Options from "./components/Options";
 import PlayerList from "./components/PlayerList";
 
 function App() {
@@ -6,6 +7,7 @@ function App() {
 		flexDirection: "column",
 		height: "100%",
 	}}>
+		<Options/>
 		<PlayerList/>
 	</div>;
 }
