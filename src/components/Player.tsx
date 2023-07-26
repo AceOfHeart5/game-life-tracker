@@ -1,10 +1,10 @@
 import { EntityId } from "@reduxjs/toolkit";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { playerRemove, playerSetScore, selectPlayerById } from "../state/playerSlice";
-import { useEffect, useState } from "react";
+import { playerRemove, selectPlayerById } from "../state/playerSlice";
+import { useEffect } from "react";
 import { selectPlayerScoreByPlayerId } from "../state/multiSliceSelectors";
 import { scoreTransactionAdd } from "../state/scoreTransactionSlice";
-import { scoreTransactionInProgressSet } from "../state/scoreTransactionInProgressSlice";
+import { scoreTransactionInProgressSet, selectScoreTransactionInProgressByPlayerId } from "../state/scoreTransactionInProgressSlice";
 
 interface PlayerProps {
     playerId: EntityId,
@@ -31,29 +31,25 @@ const scoreAdjustStyle: React.CSSProperties = {
 const Player = ({ playerId, flip=false }: PlayerProps) => {
     const dispatch = useAppDispatch();
     const player = useAppSelector(s => selectPlayerById(s.players, playerId));
-    const [temporaryScore, setTemporaryScore] = useState<{ score: number, adjustment: number} | null>(null);
+    const selectedInProgressTransaction = useAppSelector(s => selectScoreTransactionInProgressByPlayerId(s, playerId))?.scoreTransaction;
+    const inProgressTransaction = selectedInProgressTransaction !== null && selectedInProgressTransaction !== undefined ? selectedInProgressTransaction : null;
     const adjustmentIndicatorId = `player-${playerId}score-adjustment-indicator`;
 
     useEffect(() => {
-        if (temporaryScore === null) return;
+        if (inProgressTransaction === null) return;
         const adjustmentIndicator = document.getElementById(adjustmentIndicatorId);
         if (adjustmentIndicator === null) return;
         // here we restart the score adjustment CSS animation by removing it, reflowing the DOM, and re-adding it
         adjustmentIndicator.style.animation = "none";
         void adjustmentIndicator.offsetWidth; // requesting offsetWidth/offsetHeight triggers DOM reflow
         adjustmentIndicator.style.animation = "2s disappear";
-    }, [adjustmentIndicatorId, temporaryScore]);
+    }, [adjustmentIndicatorId, inProgressTransaction]);
 
-    useEffect(() => console.log("redux score updated:", player?.score), [player?.score]); // debug
+    const scoreToDisplay = useAppSelector(s => selectPlayerScoreByPlayerId(s, playerId));
 
-    const scoreToDisplay = temporaryScore ? temporaryScore.score : player === undefined ? 0 : player.score;
-
-    // debug transactions
     useEffect(() => {
         dispatch(scoreTransactionAdd({ playerId, type: "set", value: 0 }));
     }, [dispatch, playerId]);
-    const testScore = useAppSelector(s => selectPlayerScoreByPlayerId(s, playerId));
-    useEffect(() => console.log(`${player?.name} transaction score:`, testScore), [player?.name, testScore]);
 
     return player === undefined ? null : <div style={{
         backgroundColor: player.backgroundColor,
@@ -77,7 +73,7 @@ const Player = ({ playerId, flip=false }: PlayerProps) => {
                 <span style={plusMinusStyle}>-</span>
                 <span style={plusMinusStyle}>+</span>
                 {
-                    temporaryScore === null ? null : 
+                    inProgressTransaction === null ? null : 
                     <div
                         id={adjustmentIndicatorId}
                         style={{
@@ -90,11 +86,11 @@ const Player = ({ playerId, flip=false }: PlayerProps) => {
                             opacity: 0,
                         }}
                         onAnimationEnd={() => {
-                            dispatch(playerSetScore({ playerId, score: temporaryScore.score }));
-                            setTemporaryScore(null);
+                            dispatch(scoreTransactionAdd({ playerId, ...inProgressTransaction}));
+                            dispatch(scoreTransactionInProgressSet({ playerId, scoreTransaction: null }));
                         }}
                     >
-                        {(temporaryScore.adjustment >= 0 ? "+" : "-") + Math.abs(temporaryScore.adjustment)}
+                        {(inProgressTransaction.value >= 0 ? "+" : "-") + Math.abs(inProgressTransaction.value)}
                     </div>
                 }
             </div>
@@ -110,25 +106,12 @@ const Player = ({ playerId, flip=false }: PlayerProps) => {
                 className="player-score-decrease"
                 style={{ ...scoreAdjustStyle, backgroundColor: "#0a0" }}
                 onClick={() => {
-                    // old way
-                    if (temporaryScore === null) {
-                        setTemporaryScore({
-                            score: scoreToDisplay - 1,
-                            adjustment: -1,
-                        });
-                    } else {
-                        setTemporaryScore({
-                            score: temporaryScore.score - 1,
-                            adjustment: temporaryScore.adjustment - 1,
-                        })
-                    }
-                    // transactions
                     dispatch(scoreTransactionInProgressSet({
                         playerId,
                         scoreTransaction: {
                             type: "change",
-                            value: -1,
-                        },
+                            value: inProgressTransaction === null ? -1 : inProgressTransaction.value - 1,
+                        }
                     }));
                 }}
             />
@@ -136,17 +119,13 @@ const Player = ({ playerId, flip=false }: PlayerProps) => {
                 className="player-score-increase"
                 style={{ ...scoreAdjustStyle, left: "50%", backgroundColor: "#0f0" }}
                 onClick={() => {
-                    if (temporaryScore === null) {
-                        setTemporaryScore({
-                            score: scoreToDisplay + 1,
-                            adjustment: 1,
-                        });
-                    } else {
-                        setTemporaryScore({
-                            score: temporaryScore.score + 1,
-                            adjustment: temporaryScore.adjustment + 1,
-                        })
-                    }
+                    dispatch(scoreTransactionInProgressSet({
+                        playerId,
+                        scoreTransaction: {
+                            type: "change",
+                            value: inProgressTransaction === null ? 1 : inProgressTransaction.value + 1,
+                        }
+                    }));
                 }}
             />
         </div>
