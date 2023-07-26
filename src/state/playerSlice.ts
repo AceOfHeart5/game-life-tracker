@@ -1,10 +1,12 @@
 import { createEntityAdapter, createSlice, EntityId, PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
+import { ScoreTransaction } from "./models";
 
 interface Player {
     name: string,
     score: number,
     backgroundColor: string,
+    inProgressTransaction: ScoreTransaction | null,
 }
 
 interface PlayerWithId extends Player {
@@ -20,6 +22,7 @@ const player1: PlayerWithId = {
     name: "Player 1",
     score: 40,
     backgroundColor: "#f44",
+    inProgressTransaction: null,
 };
 
 const player2: PlayerWithId = {
@@ -27,6 +30,7 @@ const player2: PlayerWithId = {
     name: "Player 2",
     score: 40,
     backgroundColor: "#44f",
+    inProgressTransaction: null,
 };
 
 const playersSlice = createSlice({

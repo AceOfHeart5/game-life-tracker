@@ -2,6 +2,9 @@ import { EntityId } from "@reduxjs/toolkit";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { playerRemove, playerSetScore, selectPlayerById } from "../state/playerSlice";
 import { useEffect, useState } from "react";
+import { selectPlayerScoreByPlayerId } from "../state/multiSliceSelectors";
+import { scoreTransactionAdd } from "../state/scoreTransactionSlice";
+import { scoreTransactionInProgressSet } from "../state/scoreTransactionInProgressSlice";
 
 interface PlayerProps {
     playerId: EntityId,
@@ -44,6 +47,13 @@ const Player = ({ playerId, flip=false }: PlayerProps) => {
     useEffect(() => console.log("redux score updated:", player?.score), [player?.score]); // debug
 
     const scoreToDisplay = temporaryScore ? temporaryScore.score : player === undefined ? 0 : player.score;
+
+    // debug transactions
+    useEffect(() => {
+        dispatch(scoreTransactionAdd({ playerId, type: "set", value: 0 }));
+    }, [dispatch, playerId]);
+    const testScore = useAppSelector(s => selectPlayerScoreByPlayerId(s, playerId));
+    useEffect(() => console.log(`${player?.name} transaction score:`, testScore), [player?.name, testScore]);
 
     return player === undefined ? null : <div style={{
         backgroundColor: player.backgroundColor,
@@ -100,6 +110,7 @@ const Player = ({ playerId, flip=false }: PlayerProps) => {
                 className="player-score-decrease"
                 style={{ ...scoreAdjustStyle, backgroundColor: "#0a0" }}
                 onClick={() => {
+                    // old way
                     if (temporaryScore === null) {
                         setTemporaryScore({
                             score: scoreToDisplay - 1,
@@ -111,6 +122,14 @@ const Player = ({ playerId, flip=false }: PlayerProps) => {
                             adjustment: temporaryScore.adjustment - 1,
                         })
                     }
+                    // transactions
+                    dispatch(scoreTransactionInProgressSet({
+                        playerId,
+                        scoreTransaction: {
+                            type: "change",
+                            value: -1,
+                        },
+                    }));
                 }}
             />
             <button

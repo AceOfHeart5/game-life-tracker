@@ -11,6 +11,7 @@ const Options = () => {
                 name: `Player ${playerIds.length + 1}`,
                 score: 40,
                 backgroundColor: "#" + Math.floor(Math.random() * 16777215).toString(16),
+                inProgressTransaction: null,
             }))
         }}>Add Player</button>
     </div>;
