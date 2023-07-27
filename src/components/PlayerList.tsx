@@ -18,11 +18,15 @@ const PlayerList = () => {
 
     const playerIds = useAppSelector(s => selectPlayerAllIds(s.players));
     const flipOpponent = false;
-    return <div style={{
-        height: "100%",
-        display: "flex",
-        flexDirection: listDirection,
-    }}>
+    return <div
+        className="player-list"
+        style={{
+            height: "100%",
+            display: "flex",
+            flexDirection: listDirection,
+            overflow: "scroll",
+        }}
+    >
         {
             playerIds.map((playerId, i) => {
                 return <Player

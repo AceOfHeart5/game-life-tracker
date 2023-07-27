@@ -15,7 +15,7 @@ const PlayerScoreDisplay = ({ playerId }: PlayerScoreDisplayProps) => {
         alignItems: "center",
         justifyContent: "center",
     }}>
-        <span style={{ color: "#fff", fontSize: 200 }}>{scoreToDisplay}</span>
+        <span style={{ color: "#fff", fontSize: 100 }}>{scoreToDisplay}</span>
     </div>
 };
 

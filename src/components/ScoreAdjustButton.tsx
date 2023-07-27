@@ -21,7 +21,7 @@ const ScoreAdjustButton = ({ playerId, type, orientation }: ScoreAdjustButtonPro
             margin: 0,
             padding: 0,
             position: "absolute",
-            opacity: 0.5,
+            opacity: 0,
             backgroundColor: type === "increment" ? "#0f0" : "#0a0",
             width: orientation === "row" ? "100%" : "50%",
             height: orientation === "row" ? "50%" : "100%",
