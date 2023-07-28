@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import { scoreTransactionInProgressSet, selectScoreTransactionInProgressByPlayerId } from "../state/scoreTransactionInProgressSlice";
 import { scoreTransactionAdd } from "../state/scoreTransactionSlice";
 import { useEffect } from "react";
-import { Orientation } from "../constants";
+import { Orientation, restartCSSAnimationOnElementById } from "../utilsAndConstants";
 
 interface ScoreChangeIndicatorProps {
     playerId: EntityId,
@@ -17,13 +17,7 @@ const ScoreChangeIndicator = ({ playerId, orientation }: ScoreChangeIndicatorPro
     const adjustmentIndicatorId = `player-${playerId}score-adjustment-indicator`;
 
     useEffect(() => {
-        if (inProgressTransaction === null) return;
-        const adjustmentIndicator = document.getElementById(adjustmentIndicatorId);
-        if (adjustmentIndicator === null) return;
-        // here we restart the score adjustment CSS animation by removing it, reflowing the DOM, and re-adding it
-        adjustmentIndicator.style.animation = "none";
-        void adjustmentIndicator.offsetWidth; // requesting offsetWidth/offsetHeight triggers DOM reflow
-        adjustmentIndicator.style.animation = "2s disappear";
+        restartCSSAnimationOnElementById(adjustmentIndicatorId, "2s disappear");
     }, [adjustmentIndicatorId, inProgressTransaction]);
 
     if (inProgressTransaction === null) return null;

@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import { playerRemove, selectPlayerById } from "../state/playerSlice";
 import { useEffect } from "react";
 import { scoreTransactionAdd } from "../state/scoreTransactionSlice";
-import { Orientation } from "../constants";
+import { Orientation } from "../utilsAndConstants";
 import PlayerScoreDisplay from "./PlayerScoreDisplay";
 import ScoreAdjustButton from "./ScoreAdjustButton";
 

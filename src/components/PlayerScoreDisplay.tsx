@@ -1,7 +1,7 @@
 import { EntityId } from "@reduxjs/toolkit";
 import { selectPlayerScoreByPlayerId } from "../state/multiSliceSelectors";
 import { useAppSelector } from "../hooks";
-import { Orientation } from "../constants";
+import { Orientation } from "../utilsAndConstants";
 import ScoreChangeIndicator from "./ScoreChangeIndicator";
 
 interface PlayerScoreDisplayProps {

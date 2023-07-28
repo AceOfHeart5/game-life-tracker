@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAppSelector } from "../hooks";
 import { selectPlayerAllIds } from "../state/playerSlice";
 import Player from "./Player";
-import { Orientation } from "../constants";
+import { Orientation } from "../utilsAndConstants";
 
 const PlayerList = () => {
     const [listDirection, setListDirection] = useState<Orientation>(window.innerHeight > window.innerWidth ? "column" : "row");
