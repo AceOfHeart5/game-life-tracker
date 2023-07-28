@@ -62,3 +62,8 @@ We decided to commit to adding a "inProgressScoreTransaction" slice, and derivin
 27th of July, 2023
 
 We were able to add some better responsive code. Ok, "responsive" isn't the best word here because I don't think it's true responsiveness. All we're doing is adjusting things based on portrait or landscape. But whatever, it's working. Right now it's very clear to me that our original positions for the score adjust icons is not good, and we need to reposition the adjustment indicator. We should stick to a simple left/right for column display, and top/bottom for row display. We should put the indicator in the spot most likely to have space. For column display that's left/right of the score, and for row display that's top/bottom of the score.
+
+
+28th of July, 2023
+
+I'm pretty happy with the CSS and layout of the app right now. I think it's time to focus on other features. Although I have lots of ideas for things like choosing player names, resetting scores, viewing score transaction record, and perhaps specific presets for different games, I think the best thing to do next would be introducing local storage. In terms of practicality, this thing won't be very useful if an accidental page refresh or browser close deletes all information. So lets see what we can do about logging the redux state to the local storage, and reading from it on app start.

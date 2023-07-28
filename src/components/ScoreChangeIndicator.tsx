@@ -65,7 +65,7 @@ const ScoreChangeIndicator = ({ playerId, orientation }: ScoreChangeIndicatorPro
         }}
     >
         {(inProgressTransaction.value >= 0 ? "+" : "-") + Math.abs(inProgressTransaction.value)}
-    </div>
+    </div>;
 };
 
 export default ScoreChangeIndicator;

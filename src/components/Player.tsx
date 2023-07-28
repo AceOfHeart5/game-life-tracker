@@ -1,8 +1,6 @@
 import { EntityId } from "@reduxjs/toolkit";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { playerRemove, selectPlayerById } from "../state/playerSlice";
-import { useEffect } from "react";
-import { scoreTransactionAdd } from "../state/scoreTransactionSlice";
 import { Orientation } from "../utilsAndConstants";
 import PlayerScoreDisplay from "./PlayerScoreDisplay";
 import ScoreAdjustButton from "./ScoreAdjustButton";
@@ -23,10 +21,6 @@ const Player = ({ playerId, orientation, flip=false }: PlayerProps) => {
     const dispatch = useAppDispatch();
     const player = useAppSelector(s => selectPlayerById(s.players, playerId));
 
-    useEffect(() => {
-        dispatch(scoreTransactionAdd({ playerId, type: "set", value: 0 }));
-    }, [dispatch, playerId]);
-
     return player === undefined ? null : <div 
         className="player-card"
         style={{
@@ -35,7 +29,7 @@ const Player = ({ playerId, orientation, flip=false }: PlayerProps) => {
             display: "flex",
             flexDirection: "column",
             transform: flip ? "rotate(180deg)" : "",
-            padding: "4px",
+            padding: "8px",
         }}
     >
         <div className="name-and-actions-bar" style={{ padding: "8px", display: "flex", gap: "16px" }}>

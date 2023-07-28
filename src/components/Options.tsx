@@ -10,7 +10,7 @@ const Options = () => {
             dispatch(playerAdd({
                 name: `Player ${playerIds.length + 1}`,
                 backgroundColor: "#" + Math.floor(Math.random() * 16777215).toString(16),
-            }))
+            }));
         }}>Add Player</button>
     </div>;
 };
