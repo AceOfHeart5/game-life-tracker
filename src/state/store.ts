@@ -51,7 +51,6 @@ store.subscribe(() => {
     saveState(store.getState());
 });
 
-
 // setup player scores
 const playerIds = selectPlayerAllIds(store.getState().players);
 const playerScores = playerIds.map(id => ({ playerId: id, score: selectPlayerScoreByPlayerId(store.getState(), id)}));

@@ -34,7 +34,12 @@ const Player = ({ playerId, orientation, flip=false }: PlayerProps) => {
     >
         <div className="name-and-actions-bar" style={{ padding: "8px", display: "flex", gap: "16px" }}>
             <div style={{ fontSize: 24, textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{player.name}</div>
-            <button onClick={() => dispatch(playerRemove(playerId))}>Remove</button>
+            <button
+                onClick={() => dispatch(playerRemove(playerId))}
+                style={{
+                    marginLeft: "auto",
+                }}
+            >Remove</button>
         </div> 
         <div className="score-adjustment-container" style={{
             backgroundColor: "#333",
