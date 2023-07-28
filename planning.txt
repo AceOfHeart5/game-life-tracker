@@ -57,3 +57,8 @@ While working on adding players, it occured to me that it might be worth redoing
 26th of July, 2023
 
 We decided to commit to adding a "inProgressScoreTransaction" slice, and deriving player scores from all score transactions and a inProgressScoreTransaction if relevant. This seems to work well. We're currently working to make sure the page is responsive. I feel as though I should use a library like Tailwind or something to do this but it hasn't seemed necessary yet. Right now we're trying to make the score adjustment buttons look correct regardless of layout. The adjustment indicator is tricky because no spot looks good for it.
+
+
+27th of July, 2023
+
+We were able to add some better responsive code. Ok, "responsive" isn't the best word here because I don't think it's true responsiveness. All we're doing is adjusting things based on portrait or landscape. But whatever, it's working. Right now it's very clear to me that our original positions for the score adjust icons is not good, and we need to reposition the adjustment indicator. We should stick to a simple left/right for column display, and top/bottom for row display. We should put the indicator in the spot most likely to have space. For column display that's left/right of the score, and for row display that's top/bottom of the score.

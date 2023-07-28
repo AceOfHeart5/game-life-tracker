@@ -26,20 +26,44 @@ const ScoreChangeIndicator = ({ playerId, orientation }: ScoreChangeIndicatorPro
         adjustmentIndicator.style.animation = "2s disappear";
     }, [adjustmentIndicatorId, inProgressTransaction]);
 
-    const row = orientation === "row";
+    if (inProgressTransaction === null) return null;
 
-    return inProgressTransaction === null ? null : 
-    <div
+    const row = orientation === "row";
+    const plus = inProgressTransaction.value >= 0;
+
+    const getPositions = () => {
+        const result: React.CSSProperties = {};
+        let translateX: string = "0%";
+        let translateY: string = "0%";
+        if (row) {
+            result.left = "50%";
+            translateX = "-50%";
+            if (plus) {
+                result.top = 0;
+            } else {
+                result.bottom = 0;
+            }
+        } else {
+            result.top = "50%";
+            translateY = "-50%";
+            if (plus) {
+                result.right = 0;
+            } else {
+                result.left = 0;
+            }
+        }
+        result.transform = `translateX(${translateX}) translateY(${translateY})`;
+        return result;
+    }
+
+    return <div
         id={adjustmentIndicatorId}
         style={{
             position: "absolute",
-            padding: "0 30px",
-            fontSize: 52,
-            top: row ? "50%" : 0,
-            left: row ? "100%" : "50%",
-            transform: `translateX(${row ? "-100%" : "-50%"}) translateY(${row ? "-50%" : "0"})`,
+            fontSize: 40,
             color: "#fff",
             opacity: 0,
+            ...getPositions(),
         }}
         onAnimationEnd={() => {
             dispatch(scoreTransactionAdd({ playerId, ...inProgressTransaction}));

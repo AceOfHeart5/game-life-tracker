@@ -6,7 +6,6 @@ import { scoreTransactionAdd } from "../state/scoreTransactionSlice";
 import { Orientation } from "../constants";
 import PlayerScoreDisplay from "./PlayerScoreDisplay";
 import ScoreAdjustButton from "./ScoreAdjustButton";
-import ScoreChangeIndicator from "./ScoreChangeIndicator";
 
 interface PlayerProps {
     playerId: EntityId,
@@ -15,8 +14,8 @@ interface PlayerProps {
 }
 
 const plusMinusStyle: React.CSSProperties = {
-    textAlign: "center",
     fontSize: 24,
+    padding: "8px",
     color: "#fff",
 };
 
@@ -36,6 +35,7 @@ const Player = ({ playerId, orientation, flip=false }: PlayerProps) => {
             display: "flex",
             flexDirection: "column",
             transform: flip ? "rotate(180deg)" : "",
+            padding: "4px",
         }}
     >
         <div className="name-and-actions-bar" style={{ padding: "8px", display: "flex", gap: "16px" }}>
@@ -51,28 +51,16 @@ const Player = ({ playerId, orientation, flip=false }: PlayerProps) => {
         }}>
             {
                 orientation === "row" ? 
-                    <div
-                        className="player-info-row-style"
-                        style={{
-                            position: "relative",
-                            height: "100%",
-                            display: "flex",
-                            flexDirection: "column",
-                        }}
-                    >
-                        <div style={plusMinusStyle}>+</div>
-                        <PlayerScoreDisplay playerId={playerId}/>
-                        <div style={plusMinusStyle}>-</div>
-                        <ScoreChangeIndicator playerId={playerId} orientation={orientation}/>
+                    <div className="player-info-row-style" style={{ height: "100%", display: "flex", flexDirection: "column" }}>
+                        <div style={{ ...plusMinusStyle, textAlign: "center" }}>+</div>
+                        <PlayerScoreDisplay playerId={playerId} orientation={orientation}/>
+                        <div style={{ ...plusMinusStyle, textAlign: "center" }}>-</div>
                     </div>
                 : 
-                    <div className="player-info-column-style" style={{ height: "100%", display: "flex", flexDirection: "column" }}>
-                        <div>
-                            <span style={{...plusMinusStyle, display: "inline-block", width: "50%"}}>-</span>
-                            <span style={{...plusMinusStyle, display: "inline-block", width: "50%"}}>+</span>
-                        </div>
-                        <ScoreChangeIndicator playerId={playerId} orientation={orientation}/>
-                        <PlayerScoreDisplay playerId={playerId}/>
+                    <div className="player-info-column-style" style={{ height: "100%", display: "flex" }}>
+                        <span style={{...plusMinusStyle, margin: "auto 0" }}>-</span>
+                        <PlayerScoreDisplay playerId={playerId} orientation={orientation}/>
+                        <span style={{...plusMinusStyle, margin: "auto 0" }}>+</span>
                     </div>
             }
             <ScoreAdjustButton playerId={playerId} type={"decrement"} orientation={orientation} />
