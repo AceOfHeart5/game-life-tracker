@@ -30,10 +30,11 @@ const playersSlice = createSlice({
             playersAdapter.addOne(state, { id: uuidv4(), ...action.payload });
         },
         playerRemove: playersAdapter.removeOne,
+        playerUpdate: playersAdapter.updateOne,
     },
 });
 
-export const { playerAdd, playerRemove } = playersSlice.actions;
+export const { playerAdd, playerRemove, playerUpdate } = playersSlice.actions;
 
 export const {
     selectById: selectPlayerById,
