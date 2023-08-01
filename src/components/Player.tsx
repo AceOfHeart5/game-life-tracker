@@ -6,6 +6,7 @@ import PlayerScoreDisplay from "./PlayerScoreDisplay";
 import ScoreAdjustButton from "./ScoreAdjustButton";
 import Button from "./Button";
 import EditPlayerButtonAndModal from "./EditPlayerButtonAndModal";
+import { Typography } from "@mui/material";
 
 interface PlayerProps {
     playerId: EntityId,
@@ -34,12 +35,25 @@ const Player = ({ playerId, orientation, flip=false }: PlayerProps) => {
             padding: "8px",
         }}
     >
-        <div className="name-and-actions-bar" style={{ padding: "8px", display: "flex", gap: "16px" }}>
-            <div style={{ fontSize: 24, textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{player.name}</div>
-            <EditPlayerButtonAndModal playerId={playerId}/>
-            <Button
-                onClick={() => dispatch(playerRemove(playerId))}
-            >Remove</Button>
+        <div className="name-and-actions-bar" style={{
+            paddingTop: "8px",
+            paddingBottom: "8px",
+            display: "flex",
+            gap: "16px",
+            justifyContent: "space-between"
+        }}>
+            <Typography style={{
+                fontSize: 24,
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+            }}>
+                {player.name}
+            </Typography>
+            <div style={{ display: "flex", gap: "8px" }}>
+                <EditPlayerButtonAndModal playerId={playerId}/>
+                <Button onClick={() => dispatch(playerRemove(playerId))}>Remove</Button>
+            </div>
         </div> 
         <div className="score-adjustment-container" style={{
             backgroundColor: "#333",

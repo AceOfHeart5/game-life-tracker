@@ -5,10 +5,12 @@ interface ButtonProps {
     onClick?: () => void,
     style?: React.CSSProperties,
     children?: Children,
+    disabled?: boolean,
 }
 
-const Button = ({ onClick=() => {}, style={}, children }: ButtonProps) => {
+const Button = ({ onClick=() => {}, style={}, children, disabled }: ButtonProps) => {
     return <MuiButton
+        disabled={disabled}
         variant="outlined"
         onClick={onClick}
         sx={{
