@@ -1,7 +1,7 @@
 import { Modal, Typography } from "@mui/material";
 import { EntityId } from "@reduxjs/toolkit";
 import Button from "./Button";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { playerUpdate, selectPlayerById } from "../state/playerSlice";
 import { selectPlayerScoreByPlayerId } from "../state/multiSliceSelectors";
