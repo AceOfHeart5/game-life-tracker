@@ -15,13 +15,13 @@ const EditPlayerButtonAndModal = ({ playerId }: EditPlayerModalProps) => {
     const dispatch = useAppDispatch();
     const [open, setOpen] = useState(false);
     const player = useAppSelector(s => selectPlayerById(s.players, playerId));
-    if (player === undefined) return null;
-    const playerScore = useAppSelector(s => selectPlayerScoreByPlayerId(s, playerId));
-    if (playerScore === null) return null;
+    const playerName = player === undefined ? "unknown player" : player.name;
+    const selectedPlayerScore = useAppSelector(s => selectPlayerScoreByPlayerId(s, playerId));
+    const score = selectedPlayerScore === null ? 0 : selectedPlayerScore;
 
     const [newSettings, setNewSettings] = useState({
-        playerName: player.name,
-        score: playerScore,
+        playerName,
+        score,
     });
 
     const newNameValid = newSettings.playerName !== "";
@@ -60,12 +60,12 @@ const EditPlayerButtonAndModal = ({ playerId }: EditPlayerModalProps) => {
                     <Typography sx={{ textAlign: "right", color: "#f00", visibility: newScoreValid ? "hidden" : "visible" }}>score must be integer</Typography>
                 </div>
                 <Button disabled={!(newNameValid && newScoreValid)} style={{ alignSelf: "end" }} onClick={() => {
-                    if (newSettings.score !== playerScore) dispatch(scoreTransactionAdd({
+                    if (newSettings.score !== score) dispatch(scoreTransactionAdd({
                         playerId,
                         type: "set",
                         value: newSettings.score,
                     }));
-                    if (newSettings.playerName !== player.name) dispatch(playerUpdate({
+                    if (newSettings.playerName !== playerName) dispatch(playerUpdate({
                         id: playerId,
                         changes: { name: newSettings.playerName },
                     }));
