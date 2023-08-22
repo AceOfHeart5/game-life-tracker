@@ -24,7 +24,7 @@ const PlayerList = () => {
             height: "100%",
             display: "flex",
             flexDirection: listDirection,
-            overflow: "scroll",
+            overflow: "auto",
         }}
     >
         {

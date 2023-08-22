@@ -39,8 +39,7 @@ const Player = ({ playerId, orientation, flip=false }: PlayerProps) => {
             paddingTop: "8px",
             paddingBottom: "8px",
             display: "flex",
-            gap: "16px",
-            justifyContent: "space-between"
+            flexDirection: "column",
         }}>
             <Typography style={{
                 fontSize: 24,
@@ -50,7 +49,7 @@ const Player = ({ playerId, orientation, flip=false }: PlayerProps) => {
             }}>
                 {player.name}
             </Typography>
-            <div style={{ display: "flex", gap: "8px" }}>
+            <div style={{ display: "flex", gap: "8px", alignSelf: "end" }}>
                 <EditPlayerButtonAndModal playerId={playerId}/>
                 <Button onClick={() => dispatch(playerRemove(playerId))}>Remove</Button>
             </div>
