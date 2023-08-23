@@ -1,4 +1,4 @@
-import { createEntityAdapter, createSlice, EntityId, PayloadAction } from "@reduxjs/toolkit";
+import { createEntityAdapter, createSlice, EntityId } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 import { Player } from "./models";
 
@@ -28,9 +28,6 @@ const playersSlice = createSlice({
     }),
     reducers: {
         _playerAdd: playersAdapter.addOne,
-        // playerAdd: (state, action: PayloadAction<Player>) => {
-        //     playersAdapter.addOne(state, { id: uuidv4(), ...action.payload });
-        // },
         playerRemove: playersAdapter.removeOne,
         playerRemoveAll: playersAdapter.removeAll,
         playerUpdate: playersAdapter.updateOne,
