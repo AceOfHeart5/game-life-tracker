@@ -1,10 +1,8 @@
 import { EntityId } from "@reduxjs/toolkit";
 import { selectPlayerScoreByPlayerId } from "../state/multiSliceSelectors";
-import { useAppDispatch, useAppSelector } from "../hooks";
+import { useAppSelector } from "../hooks";
 import { Orientation } from "../utilsAndConstants";
 import ScoreChangeIndicator from "./ScoreChangeIndicator";
-import { useEffect } from "react";
-import { scoreTransactionAdd } from "../state/scoreTransactionSlice";
 
 interface PlayerScoreDisplayProps {
     playerId: EntityId,
@@ -12,15 +10,7 @@ interface PlayerScoreDisplayProps {
 }
 
 const PlayerScoreDisplay = ({ playerId, orientation }: PlayerScoreDisplayProps) => {
-    const dispatch = useAppDispatch();
     const scoreToDisplay = useAppSelector(s => selectPlayerScoreByPlayerId(s, playerId));
-
-    // delete this once mulsti slice player add is created
-    useEffect(() => {
-        if (scoreToDisplay !== null) return;
-        console.log("setting score from score display component playerId:", playerId);
-        dispatch(scoreTransactionAdd({ playerId, type: "set", value: 0 }));
-    }, [dispatch, playerId, scoreToDisplay]);
 
     return <div className="player-score" style={{
         flexGrow: 1,

@@ -72,3 +72,11 @@ I'm pretty happy with the CSS and layout of the app right now. I think it's time
 22nd of August, 2023
 
 Need to finish off the features here so it's a complete portfolio piece. We need to add the ability to view score transaction history, and some game options like resetting the entire game. Unfortunately I'm running into some trouble again with adding transactions for newly added players. We may go with a hack for now. But what we really need to do is look up how to create redux actions outside of the createSlice function. This will allow us to create actions which affect multiple slices, which is what we really need.
+
+We were able to figure something out from reading random stack over flow threads. But this is still very much not clear. A friend stated that part of the reason this all seems so confusing is because:
+
+"Redux is confusing because there's redux, react-redux, and redux toolkit probably"
+
+So it's not clear exactly which piece I need to be reading about. Each is a wrapper over the other. 
+
+After speaking with friend, it's clear what I made is a "thunk". We have to make sure we look up and read about thunks more carefully in the future. It's clear that what I've been thinking about as a "multi slice action" is actually a thunk.

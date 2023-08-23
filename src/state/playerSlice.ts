@@ -1,10 +1,6 @@
 import { createEntityAdapter, createSlice, EntityId, PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
-
-interface Player {
-    name: string,
-    backgroundColor: string,
-}
+import { Player } from "./models";
 
 interface PlayerWithId extends Player {
     id: EntityId,
@@ -31,16 +27,17 @@ const playersSlice = createSlice({
         },
     }),
     reducers: {
-        playerAdd: (state, action: PayloadAction<Player>) => {
-            playersAdapter.addOne(state, { id: uuidv4(), ...action.payload });
-        },
+        _playerAdd: playersAdapter.addOne,
+        // playerAdd: (state, action: PayloadAction<Player>) => {
+        //     playersAdapter.addOne(state, { id: uuidv4(), ...action.payload });
+        // },
         playerRemove: playersAdapter.removeOne,
         playerRemoveAll: playersAdapter.removeAll,
         playerUpdate: playersAdapter.updateOne,
     },
 });
 
-export const { playerAdd, playerRemove, playerRemoveAll, playerUpdate } = playersSlice.actions;
+export const { _playerAdd, playerRemove, playerRemoveAll, playerUpdate } = playersSlice.actions;
 
 export const {
     selectById: selectPlayerById,

@@ -1,12 +1,12 @@
 import { Modal, Typography } from "@mui/material";
-import { EntityId } from "@reduxjs/toolkit";
 import Button from "./Button";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { STARTING_PLAYERS, playerAdd, playerRemoveAll, playerUpdate, selectPlayerAllIds, selectPlayerById } from "../state/playerSlice";
-import { selectAllPlayersSameScore, selectPlayerScoreByPlayerId } from "../state/multiSliceSelectors";
+import { STARTING_PLAYERS, playerRemoveAll, selectPlayerAllIds } from "../state/playerSlice";
+import { selectAllPlayersSameScore } from "../state/multiSliceSelectors";
 import { scoreTransactionAdd, scoreTransactionRemoveAll } from "../state/scoreTransactionSlice";
 import { scoreTransactionInProgressRemoveAll } from "../state/scoreTransactionInProgressSlice";
+import { playerAdd } from "../state/multiSliceActions";
 
 const EditGameButtonAndModal = () => {
     const dispatch = useAppDispatch();
@@ -49,9 +49,8 @@ const EditGameButtonAndModal = () => {
                             dispatch(playerRemoveAll());
                             dispatch(scoreTransactionInProgressRemoveAll());
                             dispatch(scoreTransactionRemoveAll());
-                            dispatch(playerAdd(STARTING_PLAYERS.player1));
-                            dispatch(playerAdd(STARTING_PLAYERS.player2));
-                            // setAllPlayerScores(0);
+                            dispatch(playerAdd(STARTING_PLAYERS.player1, 0));
+                            dispatch(playerAdd(STARTING_PLAYERS.player2, 0));
                         }}>Reset Game</Button>
                     </div>
                     <Typography sx={{ width: "50%" }}>Restart game with 2 players both at score of 0.</Typography>
