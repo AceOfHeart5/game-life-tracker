@@ -1,10 +1,9 @@
 import { Button as MuiButton } from "@mui/material";
-import { Children } from "../utilsAndConstants";
 
 interface ButtonProps {
     onClick?: () => void,
     sx?: React.CSSProperties,
-    children?: Children,
+    children?: React.ReactNode,
     disabled?: boolean,
 }
 

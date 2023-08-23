@@ -14,7 +14,7 @@ const ScoreTransaction = ({ transactionId }: ScoreTransactionProps) => {
     const player = useAppSelector(s => selectPlayerById(s.players, transaction.playerId));
     if (player === undefined) return null;
 
-    return <div style={{ display: "flex", justifyContent: "space-between", gap: "8px" }}>
+    return <div style={{ display: "flex", justifyContent: "space-between", gap: "16px" }}>
         <Typography>{player.name}</Typography>
         <Typography>{transaction.type}</Typography>
         <Typography>{transaction.value}</Typography>

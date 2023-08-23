@@ -8,6 +8,7 @@ import { scoreTransactionAdd, scoreTransactionRemoveAll } from "../state/scoreTr
 import { scoreTransactionInProgressRemoveAll } from "../state/scoreTransactionInProgressSlice";
 import { playerAdd } from "../state/multiSliceActions";
 import ViewTransactionsButtonAndModal from "./ViewTransactionsButtonAndModal";
+import ModalContentWrapper from "./ModalContentWrapper";
 
 const EditGameButtonAndModal = () => {
     const dispatch = useAppDispatch();
@@ -36,14 +37,7 @@ const EditGameButtonAndModal = () => {
             open={open}
             onClose={() => setOpen(false)}
         >
-            <div style={{
-                backgroundColor: "#aaa",
-                padding: "16px",
-                margin: "24px",
-                display: "flex",
-                flexDirection: "column",
-                gap: "16px",
-            }}>
+            <ModalContentWrapper>
                 <div style={{ display: "flex", gap: "8px", justifyContent: "space-between" }}>
                     <div style={{ width: "50%" }}>
                         <Button onClick={() => {
@@ -71,7 +65,7 @@ const EditGameButtonAndModal = () => {
                 </div>
                 <ViewTransactionsButtonAndModal buttonText="View Score Changes" playerIds={playerIds}/>
                 <Button sx={{ alignSelf: "end" }} onClick={() => setOpen(false)}>close</Button>
-            </div>
+            </ModalContentWrapper>
         </Modal>
     </>;
 };

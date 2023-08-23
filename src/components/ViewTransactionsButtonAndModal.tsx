@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useAppSelector } from "../hooks";
 import { selectScoreTransactionsByPlayerIds } from "../state/scoreTransactionSlice";
 import ScoreTransaction from "./ScoreTransaction";
+import ModalContentWrapper from "./ModalContentWrapper";
 
 interface ViewTransactionsButtonAndModalProps {
     playerIds: EntityId[],
@@ -13,7 +14,6 @@ interface ViewTransactionsButtonAndModalProps {
 
 const ViewTransactionsButtonAndModal = ({ playerIds, buttonText }: ViewTransactionsButtonAndModalProps) => {
     const [open, setOpen] = useState(false);
-
     const transactions = useAppSelector(s => selectScoreTransactionsByPlayerIds(s, playerIds));
 
     return <div>
@@ -22,20 +22,13 @@ const ViewTransactionsButtonAndModal = ({ playerIds, buttonText }: ViewTransacti
             open={open}
             onClose={() => setOpen(false)}
         >
-            <div style={{
-                backgroundColor: "#aaa",
-                padding: "16px",
-                margin: "24px",
-                display: "flex",
-                flexDirection: "column",
-                gap: "16px",
-            }}>
+            <ModalContentWrapper>
                 {transactions.map(t => t === undefined ? null : <ScoreTransaction transactionId={t.id}/>)}
                 <Button
                     sx={{ alignSelf: "end" }}
                     onClick={() => setOpen(false)}
                 >close</Button>
-            </div>
+            </ModalContentWrapper>
         </Modal>
     </div>;
 };

@@ -1,6 +1,4 @@
 export type Orientation = "row" | "column";
-export type Children = string | React.JSX.Element | React.JSX.Element[] | null;
-
 
 export const restartCSSAnimationOnElementById = (elementId: string, cssAnimation: string) => {
     const element = document.getElementById(elementId);

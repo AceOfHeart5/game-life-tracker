@@ -7,6 +7,7 @@ import { playerUpdate, selectPlayerById } from "../state/playerSlice";
 import { selectPlayerScoreByPlayerId } from "../state/multiSliceSelectors";
 import { scoreTransactionAdd } from "../state/scoreTransactionSlice";
 import ViewTransactionsButtonAndModal from "./ViewTransactionsButtonAndModal";
+import ModalContentWrapper from "./ModalContentWrapper";
 
 interface EditPlayerModalProps {
     playerId: EntityId,
@@ -34,14 +35,7 @@ const EditPlayerButtonAndModal = ({ playerId }: EditPlayerModalProps) => {
             open={open}
             onClose={() => setOpen(false)}
         >
-            <div style={{
-                backgroundColor: "#aaa",
-                padding: "16px",
-                margin: "24px",
-                display: "flex",
-                flexDirection: "column",
-                gap: "16px",
-            }}>
+            <ModalContentWrapper>
                 <div>
                     <div style={{ display: "flex", justifyContent: "space-between" }}>
                         <label><Typography>Player Name: </Typography></label>
@@ -73,7 +67,7 @@ const EditPlayerButtonAndModal = ({ playerId }: EditPlayerModalProps) => {
                     }));
                     setOpen(false);
                 }}>save and close</Button>
-            </div>
+            </ModalContentWrapper>
         </Modal>
     </>;
 };
