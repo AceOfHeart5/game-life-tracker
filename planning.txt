@@ -80,3 +80,8 @@ We were able to figure something out from reading random stack over flow threads
 So it's not clear exactly which piece I need to be reading about. Each is a wrapper over the other. 
 
 After speaking with friend, it's clear what I made is a "thunk". We have to make sure we look up and read about thunks more carefully in the future. It's clear that what I've been thinking about as a "multi slice action" is actually a thunk.
+
+
+23rd of August, 2023
+
+Fixed some important bugs, but just realized the transaction modal isn't scrolling. You can't even exit it once there are too many transactions. That's the next thing to understand and fix.

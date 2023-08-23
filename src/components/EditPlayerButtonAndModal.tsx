@@ -1,7 +1,7 @@
 import { Modal, Typography } from "@mui/material";
 import { EntityId } from "@reduxjs/toolkit";
 import Button from "./Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks";
 import { playerUpdate, selectPlayerById } from "../state/playerSlice";
 import { selectPlayerScoreByPlayerId } from "../state/multiSliceSelectors";
@@ -26,8 +26,12 @@ const EditPlayerButtonAndModal = ({ playerId }: EditPlayerModalProps) => {
         score,
     });
 
+    useEffect(() => setNewSettings({ ...newSettings, score: score}), [score]);
+
     const newNameValid = newSettings.playerName !== "";
     const newScoreValid = newSettings.score === Math.floor(newSettings.score);
+
+    const settingsDifferent = newSettings.playerName !== playerName || newSettings.score !== score;
 
     return <>
         <Button onClick={() => setOpen(true)} sx={{ alignSelf: "end" }}>Edit</Button>
@@ -66,7 +70,7 @@ const EditPlayerButtonAndModal = ({ playerId }: EditPlayerModalProps) => {
                         changes: { name: newSettings.playerName },
                     }));
                     setOpen(false);
-                }}>save and close</Button>
+                }}>{ settingsDifferent ? "save and close" : "close"}</Button>
             </ModalContentWrapper>
         </Modal>
     </>;

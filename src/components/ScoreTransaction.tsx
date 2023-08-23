@@ -11,13 +11,14 @@ interface ScoreTransactionProps {
 const ScoreTransaction = ({ transactionId }: ScoreTransactionProps) => {
     const transaction = useAppSelector(s => selectScoreTransactionById(s, transactionId));
     if (transaction === undefined) return null;
-    const player = useAppSelector(s => selectPlayerById(s.players, transaction.playerId));
+    const { type, value, playerId } = transaction;
+    const player = useAppSelector(s => selectPlayerById(s.players, playerId));
     if (player === undefined) return null;
 
     return <div style={{ display: "flex", justifyContent: "space-between", gap: "16px" }}>
         <Typography>{player.name}</Typography>
-        <Typography>{transaction.type}</Typography>
-        <Typography>{transaction.value}</Typography>
+        <Typography>{type}</Typography>
+        <Typography>{type === "set" ? value : `${value >= 0 ? "+" : "-"}${Math.abs(value)}`}</Typography>
     </div>;
 }
 

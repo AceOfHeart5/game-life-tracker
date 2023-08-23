@@ -22,6 +22,7 @@ const scoreTransactionSlice = createSlice({
     initialState: scoreTransactionAdapter.getInitialState(),
     reducers: {
         scoreTransactionAdd: (state, action: PayloadAction<ScoreTransactionWithPlayerId>) => {
+            if (action.payload.type === "change" && action.payload.value === 0) return;
             scoreTransactionAdapter.addOne(state, {
                 id: uuidv4(),
                 time: Date.now(),
