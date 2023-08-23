@@ -67,3 +67,8 @@ We were able to add some better responsive code. Ok, "responsive" isn't the best
 28th of July, 2023
 
 I'm pretty happy with the CSS and layout of the app right now. I think it's time to focus on other features. Although I have lots of ideas for things like choosing player names, resetting scores, viewing score transaction record, and perhaps specific presets for different games, I think the best thing to do next would be introducing local storage. In terms of practicality, this thing won't be very useful if an accidental page refresh or browser close deletes all information. So lets see what we can do about logging the redux state to the local storage, and reading from it on app start.
+
+
+22nd of August, 2023
+
+Need to finish off the features here so it's a complete portfolio piece. We need to add the ability to view score transaction history, and some game options like resetting the entire game. Unfortunately I'm running into some trouble again with adding transactions for newly added players. We may go with a hack for now. But what we really need to do is look up how to create redux actions outside of the createSlice function. This will allow us to create actions which affect multiple slices, which is what we really need.

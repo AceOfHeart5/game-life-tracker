@@ -15,9 +15,10 @@ const PlayerScoreDisplay = ({ playerId, orientation }: PlayerScoreDisplayProps) 
     const dispatch = useAppDispatch();
     const scoreToDisplay = useAppSelector(s => selectPlayerScoreByPlayerId(s, playerId));
 
+    // delete this once mulsti slice player add is created
     useEffect(() => {
         if (scoreToDisplay !== null) return;
-        console.log("setting score playerId:", playerId);
+        console.log("setting score from score display component playerId:", playerId);
         dispatch(scoreTransactionAdd({ playerId, type: "set", value: 0 }));
     }, [dispatch, playerId, scoreToDisplay]);
 

@@ -28,7 +28,7 @@ const EditPlayerButtonAndModal = ({ playerId }: EditPlayerModalProps) => {
     const newScoreValid = newSettings.score === Math.floor(newSettings.score);
 
     return <>
-        <Button onClick={() => setOpen(true)} style={{ alignSelf: "end" }}>Edit</Button>
+        <Button onClick={() => setOpen(true)} sx={{ alignSelf: "end" }}>Edit</Button>
         <Modal
             open={open}
             onClose={() => setOpen(false)}
@@ -59,7 +59,7 @@ const EditPlayerButtonAndModal = ({ playerId }: EditPlayerModalProps) => {
                     </div>
                     <Typography sx={{ textAlign: "right", color: "#f00", visibility: newScoreValid ? "hidden" : "visible" }}>score must be integer</Typography>
                 </div>
-                <Button disabled={!(newNameValid && newScoreValid)} style={{ alignSelf: "end" }} onClick={() => {
+                <Button disabled={!(newNameValid && newScoreValid)} sx={{ alignSelf: "end" }} onClick={() => {
                     if (newSettings.score !== score) dispatch(scoreTransactionAdd({
                         playerId,
                         type: "set",

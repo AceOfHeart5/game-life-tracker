@@ -3,12 +3,12 @@ import { Children } from "../utilsAndConstants";
 
 interface ButtonProps {
     onClick?: () => void,
-    style?: React.CSSProperties,
+    sx?: React.CSSProperties,
     children?: Children,
     disabled?: boolean,
 }
 
-const Button = ({ onClick=() => {}, style={}, children, disabled }: ButtonProps) => {
+const Button = ({ onClick=() => {}, sx={}, children, disabled }: ButtonProps) => {
     return <MuiButton
         disabled={disabled}
         variant="outlined"
@@ -16,7 +16,7 @@ const Button = ({ onClick=() => {}, style={}, children, disabled }: ButtonProps)
         sx={{
             backgroundColor: "#555",
             color: "#fff",
-            ...style,
+            ...sx,
         }}
     >{children}</MuiButton>;
 };

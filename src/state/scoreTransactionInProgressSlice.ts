@@ -18,10 +18,11 @@ const scoreTransactionInProgressSlice = createSlice({
         scoreTransactionInProgressSet: (state, action: PayloadAction<ScoreTransactionInProgress>) => {
             scoreTransactionInProgressAdapter.setOne(state, action.payload);
         },
+        scoreTransactionInProgressRemoveAll: scoreTransactionInProgressAdapter.removeAll,
     },
 });
 
-export const { scoreTransactionInProgressSet } = scoreTransactionInProgressSlice.actions;
+export const { scoreTransactionInProgressSet, scoreTransactionInProgressRemoveAll } = scoreTransactionInProgressSlice.actions;
 export const selectScoreTransactionInProgressByPlayerId = (state: RootState, playerId: EntityId) => {
     const entities = Object.values(state.scoreTransactionsInProgress.entities);
     return entities.find(entity => entity?.playerId === playerId);

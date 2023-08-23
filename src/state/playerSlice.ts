@@ -16,13 +16,18 @@ const playersAdapter = createEntityAdapter<PlayerWithId>({
 
 const startingIds = [uuidv4(), uuidv4()];
 
+export const STARTING_PLAYERS = {
+    player1: { name: "Player 1", backgroundColor: "#f44" } as Player,
+    player2: { name: "Player 2", backgroundColor: "#44f" } as Player,
+};
+
 const playersSlice = createSlice({
     name: "players",
     initialState: playersAdapter.getInitialState({
         ids: startingIds,
         entities: {
-            [startingIds[0]]: { id: startingIds[0], name: "Player 1", backgroundColor: "#f44" },
-            [startingIds[1]]: { id: startingIds[1], name: "Player 2", backgroundColor: "#44f" },
+            [startingIds[0]]: { id: startingIds[0], ...STARTING_PLAYERS.player1 },
+            [startingIds[1]]: { id: startingIds[1], ...STARTING_PLAYERS.player2 },
         },
     }),
     reducers: {
@@ -30,11 +35,12 @@ const playersSlice = createSlice({
             playersAdapter.addOne(state, { id: uuidv4(), ...action.payload });
         },
         playerRemove: playersAdapter.removeOne,
+        playerRemoveAll: playersAdapter.removeAll,
         playerUpdate: playersAdapter.updateOne,
     },
 });
 
-export const { playerAdd, playerRemove, playerUpdate } = playersSlice.actions;
+export const { playerAdd, playerRemove, playerRemoveAll, playerUpdate } = playersSlice.actions;
 
 export const {
     selectById: selectPlayerById,

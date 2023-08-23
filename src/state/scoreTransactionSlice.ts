@@ -25,10 +25,12 @@ const scoreTransactionSlice = createSlice({
             const count = state.ids.map(id => state.entities[id]).filter(t => t?.playerId === action.payload.playerId).length;
             scoreTransactionAdapter.addOne(state, { id: uuidv4(), orderNumber: count, ...action.payload });
         },
+        scoreTransactionRemove: scoreTransactionAdapter.removeOne,
+        scoreTransactionRemoveAll: scoreTransactionAdapter.removeAll,
     },
 });
 
-export const { scoreTransactionAdd } = scoreTransactionSlice.actions;
+export const { scoreTransactionAdd, scoreTransactionRemove, scoreTransactionRemoveAll } = scoreTransactionSlice.actions;
 export const selectScoreTransactionsByPlayerId = (state: RootState, playerId: EntityId) => {
     const entities = state.scoreTransactions.entities;
     return state.scoreTransactions.ids.map(id => entities[id]).filter(t => t?.playerId === playerId);
