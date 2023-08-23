@@ -9,12 +9,12 @@ interface ScoreTransactionWithPlayerId extends ScoreTransaction {
 
 interface ScoreTransactionWithId extends ScoreTransactionWithPlayerId {
     id: EntityId,
-    orderNumber: number,
+    time: number,
 }
 
 const scoreTransactionAdapter = createEntityAdapter<ScoreTransactionWithId>({
     selectId: (scoreTransaction) => scoreTransaction.id,
-    sortComparer: (a, b) => a.orderNumber - b.orderNumber,
+    sortComparer: (a, b) => a.time - b.time,
 });
 
 const scoreTransactionSlice = createSlice({
@@ -22,8 +22,11 @@ const scoreTransactionSlice = createSlice({
     initialState: scoreTransactionAdapter.getInitialState(),
     reducers: {
         scoreTransactionAdd: (state, action: PayloadAction<ScoreTransactionWithPlayerId>) => {
-            const count = state.ids.map(id => state.entities[id]).filter(t => t?.playerId === action.payload.playerId).length;
-            scoreTransactionAdapter.addOne(state, { id: uuidv4(), orderNumber: count, ...action.payload });
+            scoreTransactionAdapter.addOne(state, {
+                id: uuidv4(),
+                time: Date.now(),
+                ...action.payload,
+            });
         },
         scoreTransactionRemove: scoreTransactionAdapter.removeOne,
         scoreTransactionRemoveAll: scoreTransactionAdapter.removeAll,
@@ -31,9 +34,12 @@ const scoreTransactionSlice = createSlice({
 });
 
 export const { scoreTransactionAdd, scoreTransactionRemove, scoreTransactionRemoveAll } = scoreTransactionSlice.actions;
-export const selectScoreTransactionsByPlayerId = (state: RootState, playerId: EntityId) => {
+export const selectScoreTransactionById = (state: RootState, transactionId: EntityId) => state.scoreTransactions.entities[transactionId];
+export const selectScoreTransactionsByPlayerIds = (state: RootState, playerId: EntityId | EntityId[]) => {
+    const ids = Array.isArray(playerId) ? playerId : [playerId];
     const entities = state.scoreTransactions.entities;
-    return state.scoreTransactions.ids.map(id => entities[id]).filter(t => t?.playerId === playerId);
+    // see if there is more efficient way to get array of entities
+    return state.scoreTransactions.ids.map(id => entities[id]).filter(t => t &&  ids.includes(t.playerId));
 };
 
 export default scoreTransactionSlice.reducer;

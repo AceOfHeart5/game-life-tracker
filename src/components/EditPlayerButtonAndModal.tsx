@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import { playerUpdate, selectPlayerById } from "../state/playerSlice";
 import { selectPlayerScoreByPlayerId } from "../state/multiSliceSelectors";
 import { scoreTransactionAdd } from "../state/scoreTransactionSlice";
+import ViewTransactionsButtonAndModal from "./ViewTransactionsButtonAndModal";
 
 interface EditPlayerModalProps {
     playerId: EntityId,
@@ -59,6 +60,7 @@ const EditPlayerButtonAndModal = ({ playerId }: EditPlayerModalProps) => {
                     </div>
                     <Typography sx={{ textAlign: "right", color: "#f00", visibility: newScoreValid ? "hidden" : "visible" }}>score must be integer</Typography>
                 </div>
+                <ViewTransactionsButtonAndModal buttonText="View Score Changes" playerIds={[playerId]} />
                 <Button disabled={!(newNameValid && newScoreValid)} sx={{ alignSelf: "end" }} onClick={() => {
                     if (newSettings.score !== score) dispatch(scoreTransactionAdd({
                         playerId,

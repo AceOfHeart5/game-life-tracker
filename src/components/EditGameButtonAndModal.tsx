@@ -7,6 +7,7 @@ import { selectAllPlayersSameScore } from "../state/multiSliceSelectors";
 import { scoreTransactionAdd, scoreTransactionRemoveAll } from "../state/scoreTransactionSlice";
 import { scoreTransactionInProgressRemoveAll } from "../state/scoreTransactionInProgressSlice";
 import { playerAdd } from "../state/multiSliceActions";
+import ViewTransactionsButtonAndModal from "./ViewTransactionsButtonAndModal";
 
 const EditGameButtonAndModal = () => {
     const dispatch = useAppDispatch();
@@ -67,6 +68,7 @@ const EditGameButtonAndModal = () => {
                         disabled={!newScoresValid || currentAllPlayersScore === newPlayerScores}
                         onClick={() => setAllPlayerScores(newPlayerScores)}
                     >Set Scores</Button>
+                    <ViewTransactionsButtonAndModal buttonText="View Score Changes" playerIds={playerIds}/>
                 </div>
                 <Button sx={{ alignSelf: "end" }} onClick={() => setOpen(false)}>close</Button>
             </div>

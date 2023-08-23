@@ -1,12 +1,12 @@
 import { EntityId } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 import { selectScoreTransactionInProgressByPlayerId } from "./scoreTransactionInProgressSlice";
-import { selectScoreTransactionsByPlayerId } from "./scoreTransactionSlice";
+import { selectScoreTransactionsByPlayerIds } from "./scoreTransactionSlice";
 import { selectPlayerAllIds } from "./playerSlice";
 
 export const selectPlayerScoreByPlayerId = (state: RootState, playerId: EntityId) => {
     const inProgress = selectScoreTransactionInProgressByPlayerId(state, playerId)?.scoreTransaction;
-    const scoreTransactions = selectScoreTransactionsByPlayerId(state, playerId);
+    const scoreTransactions = selectScoreTransactionsByPlayerIds(state, playerId);
     if (inProgress === undefined && scoreTransactions.length === 0) return null;
     let result: null | number = null;
     scoreTransactions.forEach(transaction => {
