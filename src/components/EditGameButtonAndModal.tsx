@@ -68,8 +68,8 @@ const EditGameButtonAndModal = () => {
                         disabled={!newScoresValid || currentAllPlayersScore === newPlayerScores}
                         onClick={() => setAllPlayerScores(newPlayerScores)}
                     >Set Scores</Button>
-                    <ViewTransactionsButtonAndModal buttonText="View Score Changes" playerIds={playerIds}/>
                 </div>
+                <ViewTransactionsButtonAndModal buttonText="View Score Changes" playerIds={playerIds}/>
                 <Button sx={{ alignSelf: "end" }} onClick={() => setOpen(false)}>close</Button>
             </div>
         </Modal>

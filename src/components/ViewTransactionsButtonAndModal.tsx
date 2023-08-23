@@ -16,7 +16,7 @@ const ViewTransactionsButtonAndModal = ({ playerIds, buttonText }: ViewTransacti
 
     const transactions = useAppSelector(s => selectScoreTransactionsByPlayerIds(s, playerIds));
 
-    return <>
+    return <div>
         <Button onClick={() => setOpen(true)}>{buttonText}</Button>
         <Modal
             open={open}
@@ -37,7 +37,7 @@ const ViewTransactionsButtonAndModal = ({ playerIds, buttonText }: ViewTransacti
                 >close</Button>
             </div>
         </Modal>
-    </>;
+    </div>;
 };
 
 export default ViewTransactionsButtonAndModal;
