@@ -1,4 +1,4 @@
-import { Modal, Typography } from "@mui/material";
+import { Dialog, Typography } from "@mui/material";
 import Button from "./Button";
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks";
@@ -8,7 +8,7 @@ import { scoreTransactionAdd, scoreTransactionRemoveAll } from "../state/scoreTr
 import { scoreTransactionInProgressRemoveAll } from "../state/scoreTransactionInProgressSlice";
 import { playerAdd } from "../state/multiSliceActions";
 import ViewTransactionsButtonAndModal from "./ViewTransactionsButtonAndModal";
-import ModalContentWrapper from "./ModalContentWrapper";
+import { DialogPaperSX } from "../utilsAndConstants";
 
 const EditGameButtonAndModal = () => {
     const dispatch = useAppDispatch();
@@ -33,40 +33,39 @@ const EditGameButtonAndModal = () => {
 
     return <>
         <Button onClick={() => setOpen(true)}>Edit Game</Button>
-        <Modal
+        <Dialog
             open={open}
             onClose={() => setOpen(false)}
+            PaperProps={{ sx: DialogPaperSX }}
         >
-            <ModalContentWrapper>
-                <div style={{ display: "flex", gap: "8px", justifyContent: "space-between" }}>
-                    <div style={{ width: "50%" }}>
-                        <Button onClick={() => {
-                            dispatch(playerRemoveAll());
-                            dispatch(scoreTransactionInProgressRemoveAll());
-                            dispatch(scoreTransactionRemoveAll());
-                            dispatch(playerAdd(STARTING_PLAYERS.player1, 0));
-                            dispatch(playerAdd(STARTING_PLAYERS.player2, 0));
-                        }}>Reset Game</Button>
-                    </div>
-                    <Typography sx={{ width: "50%" }}>Restart game with 2 players both at score of 0.</Typography>
+            <div style={{ display: "flex", gap: "8px", justifyContent: "space-between" }}>
+                <div style={{ width: "50%" }}>
+                    <Button onClick={() => {
+                        dispatch(playerRemoveAll());
+                        dispatch(scoreTransactionInProgressRemoveAll());
+                        dispatch(scoreTransactionRemoveAll());
+                        dispatch(playerAdd(STARTING_PLAYERS.player1, 0));
+                        dispatch(playerAdd(STARTING_PLAYERS.player2, 0));
+                    }}>Reset Game</Button>
                 </div>
-                <div>
-                    <div style={{ display: "flex", justifyContent: "space-between" }}>
-                        <label style={{ width: "50%" }}><Typography>Set Player Scores: </Typography></label>
-                        <input style={{ width: "50%" }} type="number" value={newPlayerScores} onChange={e => {
-                            setNewPlayerScores(Number(e.target.value));
-                        }}/>
-                    </div>
-                    <Typography sx={{ textAlign: "right", color: "#f00", visibility: newScoresValid ? "hidden" : "visible" }}>score must be integer</Typography>
-                    <Button
-                        disabled={!newScoresValid || currentAllPlayersScore === newPlayerScores}
-                        onClick={() => setAllPlayerScores(newPlayerScores)}
-                    >Set Scores</Button>
+                <Typography sx={{ width: "50%" }}>Restart game with 2 players both at score of 0.</Typography>
+            </div>
+            <div>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <label style={{ width: "50%" }}><Typography>Set Player Scores: </Typography></label>
+                    <input style={{ width: "50%" }} type="number" value={newPlayerScores} onChange={e => {
+                        setNewPlayerScores(Number(e.target.value));
+                    }}/>
                 </div>
-                <ViewTransactionsButtonAndModal buttonText="View Score Changes" playerIds={playerIds}/>
-                <Button sx={{ alignSelf: "end" }} onClick={() => setOpen(false)}>close</Button>
-            </ModalContentWrapper>
-        </Modal>
+                <Typography sx={{ textAlign: "right", color: "#f00", visibility: newScoresValid ? "hidden" : "visible" }}>score must be integer</Typography>
+                <Button
+                    disabled={!newScoresValid || currentAllPlayersScore === newPlayerScores}
+                    onClick={() => setAllPlayerScores(newPlayerScores)}
+                >Set Scores</Button>
+            </div>
+            <ViewTransactionsButtonAndModal buttonText="View Score Changes" playerIds={playerIds}/>
+            <Button sx={{ alignSelf: "end" }} onClick={() => setOpen(false)}>close</Button>
+        </Dialog>
     </>;
 };
 

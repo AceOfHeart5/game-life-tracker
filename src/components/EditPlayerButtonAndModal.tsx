@@ -1,4 +1,4 @@
-import { Modal, Typography } from "@mui/material";
+import { Dialog, Typography } from "@mui/material";
 import { EntityId } from "@reduxjs/toolkit";
 import Button from "./Button";
 import { useEffect, useState } from "react";
@@ -7,7 +7,7 @@ import { playerUpdate, selectPlayerById } from "../state/playerSlice";
 import { selectPlayerScoreByPlayerId } from "../state/multiSliceSelectors";
 import { scoreTransactionAdd } from "../state/scoreTransactionSlice";
 import ViewTransactionsButtonAndModal from "./ViewTransactionsButtonAndModal";
-import ModalContentWrapper from "./ModalContentWrapper";
+import { DialogPaperSX } from "../utilsAndConstants";
 
 interface EditPlayerModalProps {
     playerId: EntityId,
@@ -35,44 +35,43 @@ const EditPlayerButtonAndModal = ({ playerId }: EditPlayerModalProps) => {
 
     return <>
         <Button onClick={() => setOpen(true)} sx={{ alignSelf: "end" }}>Edit</Button>
-        <Modal
+        <Dialog
             open={open}
             onClose={() => setOpen(false)}
+            PaperProps={{ sx: DialogPaperSX }}
         >
-            <ModalContentWrapper>
-                <div>
-                    <div style={{ display: "flex", justifyContent: "space-between" }}>
-                        <label><Typography>Player Name: </Typography></label>
-                        <input type="text" value={newSettings.playerName} onChange={e => {
-                            setNewSettings({ ...newSettings, playerName: e.target.value });
-                        }}/>
-                    </div>
-                    <Typography sx={{ textAlign: "right", color: "#f00", visibility: newNameValid ? "hidden" : "visible" }}>name cannot be empty</Typography>
+            <div>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <label><Typography>Player Name: </Typography></label>
+                    <input type="text" value={newSettings.playerName} onChange={e => {
+                        setNewSettings({ ...newSettings, playerName: e.target.value });
+                    }}/>
                 </div>
-                <div>
-                    <div style={{ display: "flex", justifyContent: "space-between" }}>
-                        <label><Typography>Player Score: </Typography></label>
-                        <input type="number" value={newSettings.score} onChange={e => {
-                            setNewSettings({ ...newSettings, score: Number(e.target.value) });
-                        }}/>
-                    </div>
-                    <Typography sx={{ textAlign: "right", color: "#f00", visibility: newScoreValid ? "hidden" : "visible" }}>score must be integer</Typography>
+                <Typography sx={{ textAlign: "right", color: "#f00", visibility: newNameValid ? "hidden" : "visible" }}>name cannot be empty</Typography>
+            </div>
+            <div>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <label><Typography>Player Score: </Typography></label>
+                    <input type="number" value={newSettings.score} onChange={e => {
+                        setNewSettings({ ...newSettings, score: Number(e.target.value) });
+                    }}/>
                 </div>
-                <ViewTransactionsButtonAndModal buttonText="View Score Changes" playerIds={[playerId]} />
-                <Button disabled={!(newNameValid && newScoreValid)} sx={{ alignSelf: "end" }} onClick={() => {
-                    if (newSettings.score !== score) dispatch(scoreTransactionAdd({
-                        playerId,
-                        type: "set",
-                        value: newSettings.score,
-                    }));
-                    if (newSettings.playerName !== playerName) dispatch(playerUpdate({
-                        id: playerId,
-                        changes: { name: newSettings.playerName },
-                    }));
-                    setOpen(false);
-                }}>{ settingsDifferent ? "save and close" : "close"}</Button>
-            </ModalContentWrapper>
-        </Modal>
+                <Typography sx={{ textAlign: "right", color: "#f00", visibility: newScoreValid ? "hidden" : "visible" }}>score must be integer</Typography>
+            </div>
+            <ViewTransactionsButtonAndModal buttonText="View Score Changes" playerIds={[playerId]} />
+            <Button disabled={!(newNameValid && newScoreValid)} sx={{ alignSelf: "end" }} onClick={() => {
+                if (newSettings.score !== score) dispatch(scoreTransactionAdd({
+                    playerId,
+                    type: "set",
+                    value: newSettings.score,
+                }));
+                if (newSettings.playerName !== playerName) dispatch(playerUpdate({
+                    id: playerId,
+                    changes: { name: newSettings.playerName },
+                }));
+                setOpen(false);
+            }}>{ settingsDifferent ? "save and close" : "close"}</Button>
+        </Dialog>
     </>;
 };
 

@@ -8,3 +8,13 @@ export const restartCSSAnimationOnElementById = (elementId: string, cssAnimation
     void element.offsetWidth; // requesting offsetWidth/offsetHeight triggers DOM reflow
     element.style.animation = cssAnimation;
 };
+
+export const DialogPaperSX: React.CSSProperties = {
+    backgroundColor: "#aaa",
+    padding: "16px",
+    display: "flex",
+    flexDirection: "column",
+    gap: "16px",
+    maxWidth: "600px",
+    borderRadius: "8px",
+};

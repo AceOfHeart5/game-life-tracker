@@ -1,11 +1,11 @@
-import { Modal } from "@mui/material";
+import { Dialog } from "@mui/material";
 import { EntityId } from "@reduxjs/toolkit";
 import Button from "./Button";
 import { useState } from "react";
 import { useAppSelector } from "../hooks";
 import { selectScoreTransactionsByPlayerIds } from "../state/scoreTransactionSlice";
 import ScoreTransaction from "./ScoreTransaction";
-import ModalContentWrapper from "./ModalContentWrapper";
+import { DialogPaperSX } from "../utilsAndConstants";
 
 interface ViewTransactionsButtonAndModalProps {
     playerIds: EntityId[],
@@ -18,18 +18,25 @@ const ViewTransactionsButtonAndModal = ({ playerIds, buttonText }: ViewTransacti
 
     return <div>
         <Button onClick={() => setOpen(true)}>{buttonText}</Button>
-        <Modal
+        <Dialog
             open={open}
             onClose={() => setOpen(false)}
+            PaperProps={{ sx: DialogPaperSX }}
         >
-            <ModalContentWrapper>
+            <div style={{
+                overflowY: "auto",
+                padding: "0 8px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "8px",
+            }}>
                 {transactions.map(t => t === undefined ? null : <ScoreTransaction transactionId={t.id}/>)}
-                <Button
-                    sx={{ alignSelf: "end" }}
-                    onClick={() => setOpen(false)}
-                >close</Button>
-            </ModalContentWrapper>
-        </Modal>
+            </div>
+            <Button
+                sx={{ alignSelf: "end" }}
+                onClick={() => setOpen(false)}
+            >close</Button>
+        </Dialog>
     </div>;
 };
 
