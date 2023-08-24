@@ -37,7 +37,7 @@ const EditPlayerButtonAndModal = ({ playerId }: EditPlayerModalProps) => {
             <div>
                 <div style={{ display: "flex", justifyContent: "space-between", gap: "16px" }}>
                     <Typography>Score: {score}</Typography>
-                    <SetPlayerScoreButtonAndModal playerId={playerId}/>
+                    <SetPlayerScoreButtonAndModal playerIds={playerId}/>
                 </div>
             </div>
             <ViewTransactionsButtonAndModal buttonText="View Score Changes" playerIds={[playerId]} />

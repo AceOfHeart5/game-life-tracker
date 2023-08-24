@@ -21,7 +21,8 @@ export const selectPlayerScoreByPlayerId = (state: RootState, playerId: EntityId
 
 /**
  * If all players share the same score, returns that score.
- * Otherwise returns null.
+ * Otherwise returns "varied". Returns null if a player has
+ * an invalid score.
  * 
  * @param state 
  * @returns 
@@ -32,7 +33,7 @@ export const selectAllPlayersSameScore = (state: RootState) => {
     const result = playerScores[0];
     for (let i = 0; i < playerScores.length; i++) {
         if (playerScores[i] === null) return null;
-        if (playerScores[i] !== result) return null;
+        if (playerScores[i] !== result) return "varied";
     }
     return result;
 }

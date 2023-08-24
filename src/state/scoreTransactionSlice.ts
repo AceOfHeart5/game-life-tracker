@@ -1,4 +1,4 @@
-import { createEntityAdapter, createSlice, EntityId, PayloadAction } from "@reduxjs/toolkit";
+import { createEntityAdapter, createSelector, createSlice, EntityId, PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 import { ScoreTransaction } from "./models";
 import { RootState } from "./store";
@@ -42,11 +42,21 @@ const scoreTransactionSlice = createSlice({
 
 export const { scoreTransactionAdd, scoreTransactionUpdate, scoreTransactionRemove, scoreTransactionRemoveAll } = scoreTransactionSlice.actions;
 export const selectScoreTransactionById = (state: RootState, transactionId: EntityId) => state.scoreTransactions.entities[transactionId];
-export const selectScoreTransactionsByPlayerIds = (state: RootState, playerId: EntityId | EntityId[]) => {
+
+export const selectScoreTransactionsByPlayerIds = createSelector([
+    (state: RootState) => state.scoreTransactions,
+    (state: RootState, playerId: EntityId | EntityId[]) => playerId,
+],
+    (state, playerId) => {
+        const ids = Array.isArray(playerId) ? playerId : [playerId];
+        return Object.values(state.entities).filter(t => t && ids.includes(t.playerId));
+    }
+);
+
+export const selectScoreTransactionsByPlayerIdsB = (state: RootState, playerId: EntityId | EntityId[]) => {
     const ids = Array.isArray(playerId) ? playerId : [playerId];
     const entities = state.scoreTransactions.entities;
-    // see if there is more efficient way to get array of entities
-    return state.scoreTransactions.ids.map(id => entities[id]).filter(t => t &&  ids.includes(t.playerId));
+    return Object.values(entities).filter(t => t &&  ids.includes(t.playerId));
 };
 
 export default scoreTransactionSlice.reducer;

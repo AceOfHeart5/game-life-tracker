@@ -31,10 +31,10 @@ const ViewTransactionsButtonAndModal = ({ playerIds, buttonText }: ViewTransacti
                 flexDirection: "column",
                 gap: "8px",
             }}>
-                {transactions.map(t => t === undefined ? null : <ScoreTransaction transactionId={t.id}/>)}
+                {transactions.map(t => t === undefined ? null : <ScoreTransaction key={t.id} transactionId={t.id}/>)}
             </div>
             <Typography sx={{ textAlign: "center" }}>Final Score{playerIds.length > 1 ? "s" : ""}</Typography>
-            {playerIds.map(id => <PlayerNameAndScore playerId={id}/>)}
+            {playerIds.map(id => <PlayerNameAndScore key={id} playerId={id}/>)}
             <Button
                 sx={{ alignSelf: "end" }}
                 onClick={() => setOpen(false)}
