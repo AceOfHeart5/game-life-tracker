@@ -10,7 +10,7 @@ export const selectPlayerScoreByPlayerId = (state: RootState, playerId: EntityId
     if (inProgress === undefined && scoreTransactions.length === 0) return null;
     let result: null | number = null;
     scoreTransactions.forEach(transaction => {
-        if (transaction === undefined) return null;
+        if (transaction === undefined || !transaction.active) return null;
         result = transaction.type === "set" ? transaction.value : result === null ? null : result + transaction.value
     });
     if (inProgress !== undefined && inProgress !== null) {

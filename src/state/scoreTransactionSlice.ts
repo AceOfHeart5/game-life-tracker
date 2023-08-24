@@ -10,6 +10,8 @@ interface ScoreTransactionWithPlayerId extends ScoreTransaction {
 interface ScoreTransactionWithId extends ScoreTransactionWithPlayerId {
     id: EntityId,
     time: number,
+    active: boolean,
+    canBeDisabled: boolean,
 }
 
 const scoreTransactionAdapter = createEntityAdapter<ScoreTransactionWithId>({
@@ -23,18 +25,22 @@ const scoreTransactionSlice = createSlice({
     reducers: {
         scoreTransactionAdd: (state, action: PayloadAction<ScoreTransactionWithPlayerId>) => {
             if (action.payload.type === "change" && action.payload.value === 0) return;
+            // the first "set" transaction for a given playerId cannot be disabled
             scoreTransactionAdapter.addOne(state, {
                 id: uuidv4(),
                 time: Date.now(),
+                active: true,
+                canBeDisabled: Object.values(state.entities).filter(t => t?.playerId === action.payload.playerId && t?.type === "set").length > 0,
                 ...action.payload,
             });
         },
+        scoreTransactionUpdate: scoreTransactionAdapter.updateOne,
         scoreTransactionRemove: scoreTransactionAdapter.removeOne,
         scoreTransactionRemoveAll: scoreTransactionAdapter.removeAll,
     },
 });
 
-export const { scoreTransactionAdd, scoreTransactionRemove, scoreTransactionRemoveAll } = scoreTransactionSlice.actions;
+export const { scoreTransactionAdd, scoreTransactionUpdate, scoreTransactionRemove, scoreTransactionRemoveAll } = scoreTransactionSlice.actions;
 export const selectScoreTransactionById = (state: RootState, transactionId: EntityId) => state.scoreTransactions.entities[transactionId];
 export const selectScoreTransactionsByPlayerIds = (state: RootState, playerId: EntityId | EntityId[]) => {
     const ids = Array.isArray(playerId) ? playerId : [playerId];

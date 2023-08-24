@@ -26,11 +26,6 @@ const EditGameButtonAndModal = () => {
     const [newPlayerScores, setNewPlayerScores] = useState(0);
     const newScoresValid = newPlayerScores === Math.floor(newPlayerScores);
 
-    console.log({
-        "all player score:": currentAllPlayersScore,
-        "new score to set": newPlayerScores,
-    });
-
     return <>
         <Button onClick={() => setOpen(true)}>Edit Game</Button>
         <Dialog

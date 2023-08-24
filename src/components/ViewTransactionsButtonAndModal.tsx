@@ -1,4 +1,4 @@
-import { Dialog } from "@mui/material";
+import { Dialog, Typography } from "@mui/material";
 import { EntityId } from "@reduxjs/toolkit";
 import Button from "./Button";
 import { useState } from "react";
@@ -6,6 +6,7 @@ import { useAppSelector } from "../hooks";
 import { selectScoreTransactionsByPlayerIds } from "../state/scoreTransactionSlice";
 import ScoreTransaction from "./ScoreTransaction";
 import { DialogPaperSX } from "../utilsAndConstants";
+import PlayerNameAndScore from "./PlayerNameAndScore";
 
 interface ViewTransactionsButtonAndModalProps {
     playerIds: EntityId[],
@@ -32,6 +33,8 @@ const ViewTransactionsButtonAndModal = ({ playerIds, buttonText }: ViewTransacti
             }}>
                 {transactions.map(t => t === undefined ? null : <ScoreTransaction transactionId={t.id}/>)}
             </div>
+            <Typography sx={{ textAlign: "center" }}>Final Score{playerIds.length > 1 ? "s" : ""}</Typography>
+            {playerIds.map(id => <PlayerNameAndScore playerId={id}/>)}
             <Button
                 sx={{ alignSelf: "end" }}
                 onClick={() => setOpen(false)}
