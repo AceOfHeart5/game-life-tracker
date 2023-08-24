@@ -15,6 +15,5 @@ export const DialogPaperSX: React.CSSProperties = {
     display: "flex",
     flexDirection: "column",
     gap: "16px",
-    maxWidth: "600px",
     borderRadius: "8px",
 };
