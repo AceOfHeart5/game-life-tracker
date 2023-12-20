@@ -45,7 +45,7 @@ export const selectScoreTransactionById = (state: RootState, transactionId: Enti
 
 export const selectScoreTransactionsByPlayerIds = createSelector([
     (state: RootState) => state.scoreTransactions,
-    (state: RootState, playerId: EntityId | EntityId[]) => playerId,
+    (_: RootState, playerId: EntityId | EntityId[]) => playerId,
 ],
     (state, playerId) => {
         const ids = Array.isArray(playerId) ? playerId : [playerId];
